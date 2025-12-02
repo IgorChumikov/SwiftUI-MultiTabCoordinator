@@ -10,7 +10,7 @@ import Combine
 
 final class TabCoordinator<R: Route>: ObservableObject {
     @Published var path = NavigationPath()
-    @Published var sheet: AppModal?
+    @Published var sheet: AppSheetScreen?
     @Published var fullScreenCover: AppFullScreenCover?  // ✨ Добавили
     
     // MARK: - Navigation
@@ -30,7 +30,7 @@ final class TabCoordinator<R: Route>: ObservableObject {
     
     // MARK: - Sheets
     
-    func presentSheet(_ sheet: AppModal) {
+    func presentSheet(_ sheet: AppSheetScreen) {
         self.sheet = sheet
     }
     

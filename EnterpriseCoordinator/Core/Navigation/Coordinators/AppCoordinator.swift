@@ -18,7 +18,7 @@ final class AppCoordinator: ObservableObject {
     let profile = TabCoordinator<ProfileRoute>()
     
     // Глобальные модалки
-    @Published var globalModal: AppModal?
+    @Published var globalModal: AppSheetScreen?
     @Published var globalFullScreenCover: AppFullScreenCover?
     
     // MARK: - Межтабовая навигация
@@ -33,7 +33,7 @@ final class AppCoordinator: ObservableObject {
         selectedTab = .cart
     }
     
-    func showGlobalModal(_ modal: AppModal) {
+    func showGlobalModal(_ modal: AppSheetScreen) {
         globalModal = modal
     }
     
