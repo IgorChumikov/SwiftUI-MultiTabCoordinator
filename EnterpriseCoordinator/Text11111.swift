@@ -43,25 +43,6 @@ struct ProfileTab: View {
     }
 }
 
-struct CartView: View {
-    @EnvironmentObject var app: AppCoordinator
-    @ObservedObject var coordinator: TabCoordinator<CartRoute>
-    
-    var body: some View {
-        List {
-            Button("💳 Оформить заказ") {
-                coordinator.push(.checkout)
-            }
-            
-            Section("Отладка") {
-                Text("Path count: \(coordinator.path.count)")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .navigationTitle("🛒 Корзина")
-    }
-}
-
 struct ProfileView: View {
     @EnvironmentObject var app: AppCoordinator
     @ObservedObject var coordinator: TabCoordinator<ProfileRoute>
@@ -87,36 +68,6 @@ struct ProfileView: View {
             }
         }
         .navigationTitle("👤 Профиль")
-    }
-}
-
-struct CheckoutView: View {
-    @EnvironmentObject var app: AppCoordinator
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("💳 Оформление заказа")
-                .font(.title)
-            
-            Button("Подтвердить заказ") {
-                app.cart.push(.orderConfirmed(id: "12345"))
-            }
-            .buttonStyle(.borderedProminent)
-        }
-        .navigationTitle("Оформление")
-    }
-}
-
-struct OrderConfirmedView: View {
-    let id: String
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("✅")
-                .font(.system(size: 80))
-            Text("Заказ \(id) подтверждён!")
-                .font(.title)
-        }
-        .navigationTitle("Успех")
     }
 }
 
