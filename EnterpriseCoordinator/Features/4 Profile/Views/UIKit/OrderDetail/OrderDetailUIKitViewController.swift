@@ -11,7 +11,7 @@ final class OrderDetailUIKitViewController: UIViewController {
     
     // MARK: - Properties
     
-    var coordinator: TabCoordinator<ProfileRoute>!
+    var coordinator: NavigationCoordinator<ProfileRoute>!
     var orderId: String!
     private var scrollView: UIScrollView!
     private var contentStackView: UIStackView!

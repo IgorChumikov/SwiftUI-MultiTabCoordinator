@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: TabCoordinator<HomeRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<HomeRoute>
     
     var body: some View {
         List {

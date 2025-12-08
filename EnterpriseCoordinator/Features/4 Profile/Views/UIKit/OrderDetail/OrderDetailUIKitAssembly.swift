@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OrderDetailUIKitAssembly: UIViewControllerRepresentable {
-    let coordinator: TabCoordinator<ProfileRoute>
+    let coordinator: NavigationCoordinator<ProfileRoute>
     let orderId: String
     
     func makeUIViewController(context: Context) -> UIViewController {

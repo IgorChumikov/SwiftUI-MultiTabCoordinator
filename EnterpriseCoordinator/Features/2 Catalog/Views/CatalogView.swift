@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CatalogView: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: TabCoordinator<CatalogRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<CatalogRoute>
     
     var body: some View {
         List {

@@ -9,7 +9,7 @@ import SwiftUI
 
 import SwiftUI
 
-extension TabCoordinator where R == CatalogRoute {
+extension NavigationCoordinator where R == CatalogRoute {
     @ViewBuilder
     func build(_ route: CatalogRoute) -> some View {
         switch route {

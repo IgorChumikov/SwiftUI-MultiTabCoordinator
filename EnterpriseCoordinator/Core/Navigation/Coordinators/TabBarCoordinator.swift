@@ -12,10 +12,10 @@ final class TabBarCoordinator: ObservableObject {
     @Published var selectedTab: AppTab = .home
     
     // Координаторы для каждой вкладки
-    let home = TabCoordinator<HomeRoute>()
-    let catalog = TabCoordinator<CatalogRoute>()
-    let cart = TabCoordinator<CartRoute>()
-    let profile = TabCoordinator<ProfileRoute>()
+    let home = NavigationCoordinator<HomeRoute>()
+    let catalog = NavigationCoordinator<CatalogRoute>()
+    let cart = NavigationCoordinator<CartRoute>()
+    let profile = NavigationCoordinator<ProfileRoute>()
     
     // Глобальные модалки
     @Published var globalModal: AppSheetScreen?

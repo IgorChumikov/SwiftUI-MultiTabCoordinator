@@ -1,5 +1,5 @@
 //
-//  TabCoordinator.swift
+//  NavigationCoordinator.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-final class TabCoordinator<R: Route>: ObservableObject {
+final class NavigationCoordinator<R: Route>: ObservableObject {
     @Published var path = NavigationPath()
     @Published var sheet: AppSheetScreen?
     @Published var fullScreenCover: AppFullScreenCover?  // ✨ Добавили

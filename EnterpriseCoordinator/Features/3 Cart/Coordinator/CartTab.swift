@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CartTab: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: TabCoordinator<CartRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<CartRoute>
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {

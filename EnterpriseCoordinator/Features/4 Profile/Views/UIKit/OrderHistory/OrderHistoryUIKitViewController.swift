@@ -11,7 +11,7 @@ final class OrderHistoryUIKitViewController: UIViewController {
     
     // MARK: - Properties
     
-    var coordinator: TabCoordinator<ProfileRoute>!
+    var coordinator: NavigationCoordinator<ProfileRoute>!
     private var tableView: UITableView!
     private let orders = Order.mockOrders
     

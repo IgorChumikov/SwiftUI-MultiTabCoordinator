@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileTab: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: TabCoordinator<ProfileRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {

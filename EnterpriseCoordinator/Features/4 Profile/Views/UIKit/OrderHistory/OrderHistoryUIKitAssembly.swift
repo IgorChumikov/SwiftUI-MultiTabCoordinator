@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OrderHistoryUIKitAssembly: UIViewControllerRepresentable {
-    let coordinator: TabCoordinator<ProfileRoute>
+    let coordinator: NavigationCoordinator<ProfileRoute>
     
     func makeUIViewController(context: Context) -> UIViewController {
         let viewController = OrderHistoryUIKitViewController()

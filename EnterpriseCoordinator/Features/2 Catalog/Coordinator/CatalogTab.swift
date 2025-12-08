@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CatalogTab: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: TabCoordinator<CatalogRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<CatalogRoute>
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
