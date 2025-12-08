@@ -8,14 +8,20 @@
 import SwiftUI
 import Combine
 
+// Type aliases для удобства чтения
+typealias HomeCoordinator = NavigationCoordinator<HomeRoute>
+typealias CatalogCoordinator = NavigationCoordinator<CatalogRoute>
+typealias CartCoordinator = NavigationCoordinator<CartRoute>
+typealias ProfileCoordinator = NavigationCoordinator<ProfileRoute>
+
 final class TabBarCoordinator: ObservableObject {
     @Published var selectedTab: AppTab = .home
     
     // Координаторы для каждой вкладки
-    let home = NavigationCoordinator<HomeRoute>()
-    let catalog = NavigationCoordinator<CatalogRoute>()
-    let cart = NavigationCoordinator<CartRoute>()
-    let profile = NavigationCoordinator<ProfileRoute>()
+    let home = HomeCoordinator()
+    let catalog = CatalogCoordinator()
+    let cart = CartCoordinator()
+    let profile = ProfileCoordinator()
     
     // Глобальные модалки
     @Published var globalModal: AppSheetScreen?
