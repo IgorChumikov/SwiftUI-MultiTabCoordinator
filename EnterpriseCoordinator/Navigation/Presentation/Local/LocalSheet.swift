@@ -1,5 +1,5 @@
 //
-//  AppFullScreenCover.swift
+//  LocalSheet.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AppFullScreenCover: Identifiable {
+enum LocalSheet: Identifiable {
     case onboarding
     case camera
     case videoPlayer(url: String)
@@ -23,7 +23,7 @@ enum AppFullScreenCover: Identifiable {
 
 extension TabBarCoordinator {
     @ViewBuilder
-    func buildFullScreenCover(_ cover: AppFullScreenCover) -> some View {
+    func buildFullScreenCover(_ cover: LocalSheet) -> some View {
         switch cover {
         case .onboarding:
             OnboardingView()

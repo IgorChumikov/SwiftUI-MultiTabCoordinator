@@ -1,5 +1,5 @@
 //
-//  AppSheetScreen.swift
+//  GlobalCover.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AppSheetScreen: Identifiable {
+enum LocalCover: Identifiable {
     case login
     case quickView(productId: String)
     
@@ -21,7 +21,7 @@ enum AppSheetScreen: Identifiable {
 
 extension TabBarCoordinator {
     @ViewBuilder
-    func buildModal(_ modal: AppSheetScreen) -> some View {
+    func buildModal(_ modal: LocalCover) -> some View {
         switch modal {
         case .login:
             LoginView()

@@ -10,8 +10,10 @@ import Combine
 
 final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     @Published var path = NavigationPath()
-    @Published var sheet: AppSheetScreen?
-    @Published var fullScreenCover: AppFullScreenCover?  // ✨ Добавили
+    
+    
+    @Published var sheet: LocalCover?
+    @Published var fullScreenCover: LocalSheet?
     
     // MARK: - Navigation
     
@@ -30,7 +32,7 @@ final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     
     // MARK: - Sheets
     
-    func presentSheet(_ sheet: AppSheetScreen) {
+    func presentSheet(_ sheet: LocalCover) {
         self.sheet = sheet
     }
     
@@ -40,7 +42,7 @@ final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     
     // MARK: - Full Screen Covers ✨
     
-    func presentFullScreenCover(_ cover: AppFullScreenCover) {
+    func presentFullScreenCover(_ cover: LocalSheet) {
         self.fullScreenCover = cover
     }
     
