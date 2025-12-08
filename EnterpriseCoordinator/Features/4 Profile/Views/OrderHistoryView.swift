@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OrderHistoryView: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     
     var body: some View {
         List(1...10, id: \.self) { i in

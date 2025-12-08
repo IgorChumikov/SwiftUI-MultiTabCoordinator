@@ -21,7 +21,7 @@ enum AppFullScreenCover: Identifiable {
     }
 }
 
-extension AppCoordinator {
+extension TabBarCoordinator {
     @ViewBuilder
     func buildFullScreenCover(_ cover: AppFullScreenCover) -> some View {
         switch cover {

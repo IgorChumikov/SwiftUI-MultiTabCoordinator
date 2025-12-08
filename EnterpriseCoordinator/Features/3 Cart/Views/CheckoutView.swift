@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CheckoutView: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     
     var body: some View {
         VStack(spacing: 20) {

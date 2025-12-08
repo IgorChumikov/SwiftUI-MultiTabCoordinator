@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeTab: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: TabCoordinator<HomeRoute>
     
     var body: some View {

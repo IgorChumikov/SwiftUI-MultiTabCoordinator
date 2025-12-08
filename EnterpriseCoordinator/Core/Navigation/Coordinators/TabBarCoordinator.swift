@@ -1,5 +1,5 @@
 //
-//  AppCoordinator.swift
+//  TabBarCoordinator.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-final class AppCoordinator: ObservableObject {
+final class TabBarCoordinator: ObservableObject {
     @Published var selectedTab: AppTab = .home
     
     // Координаторы для каждой вкладки

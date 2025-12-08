@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CatalogTab: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: TabCoordinator<CatalogRoute>
     
     var body: some View {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: TabCoordinator<ProfileRoute>
     
     var body: some View {

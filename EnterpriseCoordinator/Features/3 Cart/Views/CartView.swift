@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CartView: View {
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: TabCoordinator<CartRoute>
     
     var body: some View {

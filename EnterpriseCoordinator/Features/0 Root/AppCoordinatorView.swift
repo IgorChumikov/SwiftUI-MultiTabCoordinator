@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppCoordinatorView: View {
-    @StateObject private var coordinator = AppCoordinator()
+    @StateObject private var coordinator = TabBarCoordinator()
     
     var body: some View {
         TabView(selection: $coordinator.selectedTab) {

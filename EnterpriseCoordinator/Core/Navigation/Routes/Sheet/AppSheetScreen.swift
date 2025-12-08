@@ -19,7 +19,7 @@ enum AppSheetScreen: Identifiable {
     }
 }
 
-extension AppCoordinator {
+extension TabBarCoordinator {
     @ViewBuilder
     func buildModal(_ modal: AppSheetScreen) -> some View {
         switch modal {

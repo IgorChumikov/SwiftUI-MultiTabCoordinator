@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProductDetailView: View {
     let id: String
-    @EnvironmentObject var app: AppCoordinator
+    @EnvironmentObject var app: TabBarCoordinator
     
     var body: some View {
         VStack(spacing: 20) {
