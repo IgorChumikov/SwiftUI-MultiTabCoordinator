@@ -8,26 +8,27 @@
 import SwiftUI
 import Combine
 
-// Type aliases для удобства чтения
-typealias HomeCoordinator = NavigationCoordinator<HomeRoute>
-typealias CatalogCoordinator = NavigationCoordinator<CatalogRoute>
-typealias CartCoordinator = NavigationCoordinator<CartRoute>
-typealias ProfileCoordinator = NavigationCoordinator<ProfileRoute>
+// MARK: - TabBarCoordinator
 
 final class TabBarCoordinator: ObservableObject {
+    
+    // MARK: - Properties
+    
     @Published var selectedTab: AppTab = .home
     
-    // Координаторы для каждой вкладки
-    let home = HomeCoordinator()
-    let catalog = CatalogCoordinator()
-    let cart = CartCoordinator()
-    let profile = ProfileCoordinator()
+    // MARK: - Tab Coordinators
     
-    // Глобальные модалки
-    @Published var globalModal: GlobalCover?
-    @Published var globalFullScreenCover: GlobalSheet?
+    let home = NavigationCoordinator<HomeRoute>()
+    let catalog = NavigationCoordinator<CatalogRoute>()
+    let cart = NavigationCoordinator<CartRoute>()
+    let profile = NavigationCoordinator<ProfileRoute>()
     
-    // MARK: - Межтабовая навигация
+    // MARK: - Global Presentation
+    
+    @Published var globalSheet: GlobalSheet?
+    @Published var globalCover: GlobalCover?
+    
+    // MARK: - Cross-Tab Navigation
     
     func showProduct(id: String) {
         selectedTab = .home
@@ -39,11 +40,23 @@ final class TabBarCoordinator: ObservableObject {
         selectedTab = .cart
     }
     
-    func showGlobalModal(_ modal: GlobalCover) {
-        globalModal = modal
+    // MARK: - Sheet Presentation
+    
+    func showGlobalSheet(_ sheet: GlobalSheet) {
+        globalSheet = sheet
     }
     
-    func showGlobalFullScreenCover(_ cover: GlobalSheet) {
-          globalFullScreenCover = cover
-      }
+    func dismissGlobalSheet() {
+        globalSheet = nil
+    }
+    
+    // MARK: - Full Screen Cover Presentation
+    
+    func showGlobalCover(_ cover: GlobalCover) {
+        globalCover = cover
+    }
+    
+    func dismissGlobalCover() {
+        globalCover = nil
+    }
 }

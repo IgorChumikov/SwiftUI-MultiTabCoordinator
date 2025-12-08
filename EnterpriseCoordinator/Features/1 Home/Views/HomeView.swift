@@ -27,10 +27,10 @@ struct HomeView: View {
             
             Section("Модалки") {
                 Button("📄 Quick View 456") {
-                    coordinator.presentSheet(.quickView(productId: "456"))
+                    coordinator.showLocalCover(.quickView(productId: "456"))
                 }
                 Button("🔐 Глобальный логин") {
-                    app.showGlobalModal(.login)
+                    app.showGlobalSheet(.onboarding)
                 }
             }
             

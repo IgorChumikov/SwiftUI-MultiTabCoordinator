@@ -17,12 +17,11 @@ struct ProfileTab: View {
                 .navigationDestination(for: ProfileRoute.self) { route in
                     coordinator.build(route)
                 }
-                .sheet(item: $coordinator.sheet) { modal in
-                    app.buildModal(modal)
+                .sheet(item: $coordinator.localSheet) { sheet in
+                    app.buildLocalSheet(sheet)
                 }
-                .fullScreenCover(item: $coordinator.fullScreenCover) { cover in
-                    app.buildFullScreenCover(cover)
-                }
-        }
+                .fullScreenCover(item: $coordinator.localCover) { cover in
+                    app.buildLocalCover(cover)
+                }        }
     }
 }

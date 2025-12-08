@@ -8,12 +8,18 @@
 import SwiftUI
 import Combine
 
+// MARK: - NavigationCoordinator
+
 final class NavigationCoordinator<RouteType: Route>: ObservableObject {
+    
+    // MARK: - Published Properties
+    
     @Published var path = NavigationPath()
     
+    // MARK: - Local Presentation
     
-    @Published var sheet: LocalCover?
-    @Published var fullScreenCover: LocalSheet?
+    @Published var localSheet: LocalSheet?
+    @Published var localCover: LocalCover?
     
     // MARK: - Navigation
     
@@ -30,23 +36,23 @@ final class NavigationCoordinator<RouteType: Route>: ObservableObject {
         path.removeLast(path.count)
     }
     
-    // MARK: - Sheets
+    // MARK: - Sheet Presentation
     
-    func presentSheet(_ sheet: LocalCover) {
-        self.sheet = sheet
+    func showLocalSheet(_ localSheet: LocalSheet) {
+        self.localSheet = localSheet
     }
     
-    func dismissSheet() {
-        sheet = nil
+    func dismissLocalSheet() {
+        localSheet = nil
     }
     
-    // MARK: - Full Screen Covers ✨
+    // MARK: - Full Screen Cover Presentation
     
-    func presentFullScreenCover(_ cover: LocalSheet) {
-        self.fullScreenCover = cover
+    func showLocalCover(_ localCover: LocalCover) {
+        self.localCover = localCover
     }
     
-    func dismissFullScreenCover() {
-        fullScreenCover = nil
+    func dismissLocalCover() {
+        localCover = nil
     }
 }

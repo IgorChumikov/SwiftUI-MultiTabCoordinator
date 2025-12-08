@@ -23,7 +23,7 @@ enum GlobalSheet: Identifiable {
 
 extension TabBarCoordinator {
     @ViewBuilder
-    func buildFullScreenCover(_ cover: GlobalSheet) -> some View {
+    func buildGlobalSheet(_ cover: GlobalSheet) -> some View {
         switch cover {
         case .onboarding:
             OnboardingView()

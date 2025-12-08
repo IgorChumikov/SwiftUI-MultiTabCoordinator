@@ -21,7 +21,7 @@ enum LocalCover: Identifiable {
 
 extension TabBarCoordinator {
     @ViewBuilder
-    func buildModal(_ modal: LocalCover) -> some View {
+    func buildLocalCover(_ modal: LocalCover) -> some View {
         switch modal {
         case .login:
             LoginView()

@@ -21,7 +21,7 @@ enum GlobalCover: Identifiable {
 
 extension TabBarCoordinator {
     @ViewBuilder
-    func buildModal(_ modal: GlobalCover) -> some View {
+    func buildGlobalCover(_ modal: GlobalCover) -> some View {
         switch modal {
         case .login:
             LoginView()

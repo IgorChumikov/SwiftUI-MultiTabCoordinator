@@ -37,11 +37,11 @@ struct AppCoordinatorView: View {
                 .tag(AppTab.profile)
         }
         .environmentObject(coordinator)
-        .sheet(item: $coordinator.globalModal) { modal in
-            coordinator.buildModal(modal)
+        .sheet(item: $coordinator.globalSheet) { sheet in
+            coordinator.buildGlobalSheet(sheet)
         }
-        .fullScreenCover(item: $coordinator.globalFullScreenCover) { cover in
-            coordinator.buildFullScreenCover(cover)
+        .fullScreenCover(item: $coordinator.globalCover) { cover in
+            coordinator.buildGlobalCover(cover)
         }
     }
 }
