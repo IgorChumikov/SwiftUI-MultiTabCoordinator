@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension NavigationCoordinator where R == CartRoute {
+extension NavigationCoordinator where RouteType == CartRoute {
     @ViewBuilder
     func build(_ route: CartRoute) -> some View {
         switch route {

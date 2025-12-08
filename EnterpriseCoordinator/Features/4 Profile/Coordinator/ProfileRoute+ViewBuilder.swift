@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension NavigationCoordinator where R == ProfileRoute {
+extension NavigationCoordinator where RouteType == ProfileRoute {
     @ViewBuilder
     func build(_ route: ProfileRoute) -> some View {
         switch route {

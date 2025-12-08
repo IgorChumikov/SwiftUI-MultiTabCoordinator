@@ -8,14 +8,14 @@
 import SwiftUI
 import Combine
 
-final class NavigationCoordinator<R: Route>: ObservableObject {
+final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     @Published var path = NavigationPath()
     @Published var sheet: AppSheetScreen?
     @Published var fullScreenCover: AppFullScreenCover?  // ✨ Добавили
     
     // MARK: - Navigation
     
-    func push(_ route: R) {
+    func push(_ route: RouteType) {
         path.append(route)
     }
     

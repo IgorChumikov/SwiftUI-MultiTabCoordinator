@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension NavigationCoordinator where R == HomeRoute {
+extension NavigationCoordinator where RouteType == HomeRoute {
     @ViewBuilder
     func build(_ route: HomeRoute) -> some View {
         switch route {
