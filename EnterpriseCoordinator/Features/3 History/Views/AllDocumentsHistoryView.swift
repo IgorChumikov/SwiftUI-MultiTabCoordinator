@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AllDocumentsHistoryView: View {
     
+    @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     let documentTitle: String
     
     var body: some View {
@@ -24,5 +25,5 @@ struct AllDocumentsHistoryView: View {
 
 
 #Preview {
-    AllDocumentsHistoryView(documentTitle: "Договор аренды")
+    AllDocumentsHistoryView(coordinator: NavigationCoordinator<HistoryRoute>(), documentTitle: "Договор аренды")
 }

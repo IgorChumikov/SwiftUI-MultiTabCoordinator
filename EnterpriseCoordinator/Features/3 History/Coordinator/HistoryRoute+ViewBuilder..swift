@@ -12,9 +12,9 @@ extension NavigationCoordinator where RouteType == HistoryRoute {
     func build(_ route: HistoryRoute) -> some View {
         switch route {
         case .documentDetails(document: let document):
-            DocumentHistoryDetailsView( document: document)
+            DocumentHistoryDetailsView( coordinator: self, document: document)
         case .allDocumentsHistoryView(documentTitle: let documentTitle):
-            AllDocumentsHistoryView(documentTitle: documentTitle)
+            AllDocumentsHistoryView(coordinator: self, documentTitle: documentTitle)
         }
     }
 }

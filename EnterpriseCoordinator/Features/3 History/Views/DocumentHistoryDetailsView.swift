@@ -10,6 +10,7 @@ import SwiftUI
 struct DocumentHistoryDetailsView: View {
     
     @EnvironmentObject var app: TabBarCoordinator
+    @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     let document: DocumentHistory
     
     var body: some View {
@@ -21,7 +22,7 @@ struct DocumentHistoryDetailsView: View {
                 .foregroundStyle(.secondary)
             
             Button {
-                app.history.push(.allDocumentsHistoryView(documentTitle: document.title))
+                coordinator.push(.allDocumentsHistoryView(documentTitle: document.title))
                 
             } label: {
                 Text("Открыть все документы \(document.title)")
@@ -34,6 +35,7 @@ struct DocumentHistoryDetailsView: View {
 
 #Preview {
     DocumentHistoryDetailsView(
+        coordinator: NavigationCoordinator<HistoryRoute>(),
         document: DocumentHistory(
             id: "1",
             title: "Договор аренды"
