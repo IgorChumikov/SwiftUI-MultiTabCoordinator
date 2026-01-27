@@ -11,10 +11,10 @@ extension NavigationCoordinator where RouteType == HistoryRoute {
     @ViewBuilder
     func build(_ route: HistoryRoute) -> some View {
         switch route {
-        case .checkout:
-            CheckoutView()
-        case .orderConfirmed(let id):
-            OrderConfirmedView(id: id)
+        case .documentDetails(document: let document):
+            DocumentHistoryDetailsView( document: document)
+        case .allDocumentsHistoryView(documentTitle: let documentTitle):
+            AllDocumentsHistoryView(documentTitle: documentTitle)
         }
     }
 }

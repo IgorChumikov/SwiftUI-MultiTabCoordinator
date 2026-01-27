@@ -168,3 +168,8 @@ final class OrderDetailUIKitViewController: UIViewController {
         coordinator.pop()
     }
 }
+
+
+#Preview {
+    OrderDetailUIKitViewController()
+}
