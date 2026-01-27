@@ -1,5 +1,5 @@
 //
-//  CartView.swift
+//  HistoryView.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct CartView: View {
+struct HistoryView: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: NavigationCoordinator<CartRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     
     var body: some View {
         List {
@@ -22,6 +22,6 @@ struct CartView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .navigationTitle("🛒 Корзина")
+        .navigationTitle("История")
     }
 }

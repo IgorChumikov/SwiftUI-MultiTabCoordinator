@@ -24,11 +24,11 @@ struct AppCoordinatorView: View {
                 }
                 .tag(AppTab.catalog)
             
-            CartTab(coordinator: coordinator.cart)
+            HistoryTab(coordinator: coordinator.history)
                 .tabItem {
-                    Label(AppTab.cart.title, systemImage: AppTab.cart.icon)
+                    Label(AppTab.history.title, systemImage: AppTab.history.icon)
                 }
-                .tag(AppTab.cart)
+                .tag(AppTab.history)
             
             ProfileTab(coordinator: coordinator.profile)
                 .tabItem {

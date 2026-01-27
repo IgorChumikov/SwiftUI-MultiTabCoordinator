@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CartRoute: Route {
+enum HistoryRoute: Route {
     case checkout
     case orderConfirmed(id: String)
     

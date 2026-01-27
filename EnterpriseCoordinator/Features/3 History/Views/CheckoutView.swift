@@ -16,7 +16,7 @@ struct CheckoutView: View {
                 .font(.title)
             
             Button("Подтвердить заказ") {
-                app.cart.push(.orderConfirmed(id: "12345"))
+                app.history.push(.orderConfirmed(id: "12345"))
             }
             .buttonStyle(.borderedProminent)
         }

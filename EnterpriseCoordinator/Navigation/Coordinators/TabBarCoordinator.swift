@@ -20,7 +20,7 @@ final class TabBarCoordinator: ObservableObject {
     
     let home = NavigationCoordinator<HomeRoute>()
     let catalog = NavigationCoordinator<CatalogRoute>()
-    let cart = NavigationCoordinator<CartRoute>()
+    let history = NavigationCoordinator<HistoryRoute>()
     let profile = NavigationCoordinator<ProfileRoute>()
     
     // MARK: - Global Presentation
@@ -37,7 +37,7 @@ final class TabBarCoordinator: ObservableObject {
     }
     
     func showCart() {
-        selectedTab = .cart
+        selectedTab = .history
     }
     
     // MARK: - Sheet Presentation

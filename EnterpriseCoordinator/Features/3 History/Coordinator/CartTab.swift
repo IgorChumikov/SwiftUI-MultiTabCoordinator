@@ -1,5 +1,5 @@
 //
-//  CartTab.swift
+//  HistoryTab.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct CartTab: View {
+struct HistoryTab: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: NavigationCoordinator<CartRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            CartView(coordinator: coordinator)
-                .navigationDestination(for: CartRoute.self) { route in
+            HistoryView(coordinator: coordinator)
+                .navigationDestination(for: HistoryRoute.self) { route in
                     coordinator.build(route)
                 }
                 .sheet(item: $coordinator.localSheet) { sheet in
