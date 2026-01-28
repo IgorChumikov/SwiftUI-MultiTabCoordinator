@@ -19,7 +19,7 @@ final class TabBarCoordinator: ObservableObject {
     // MARK: - Tab Coordinators
     
     let home = NavigationCoordinator<HomeRoute>()
-    let catalog = NavigationCoordinator<CatalogRoute>()
+    let favorites = NavigationCoordinator<FavoritesRoute>()
     let history = NavigationCoordinator<HistoryRoute>()
     let profile = NavigationCoordinator<ProfileRoute>()
     

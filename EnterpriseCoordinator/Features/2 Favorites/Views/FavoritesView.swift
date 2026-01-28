@@ -1,5 +1,5 @@
 //
-//  CatalogView.swift
+//  FavoritesView.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct CatalogView: View {
+struct FavoritesView: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: NavigationCoordinator<CatalogRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<FavoritesRoute>
     
     var body: some View {
         List {
@@ -33,6 +33,6 @@ struct CatalogView: View {
                 }
             }
         }
-        .navigationTitle("📚 Каталог")
+        .navigationTitle("Избранное")
     }
 }

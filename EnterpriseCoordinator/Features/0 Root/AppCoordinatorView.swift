@@ -18,11 +18,11 @@ struct AppCoordinatorView: View {
                 }
                 .tag(AppTab.home)
             
-            CatalogTab(coordinator: coordinator.catalog)
+            FavoritesTab(coordinator: coordinator.favorites)
                 .tabItem {
-                    Label(AppTab.catalog.title, systemImage: AppTab.catalog.icon)
+                    Label(AppTab.favorites.title, systemImage: AppTab.favorites.icon)
                 }
-                .tag(AppTab.catalog)
+                .tag(AppTab.favorites)
             
             HistoryTab(coordinator: coordinator.history)
                 .tabItem {

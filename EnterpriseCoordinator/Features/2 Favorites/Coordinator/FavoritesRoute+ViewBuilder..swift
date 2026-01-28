@@ -1,5 +1,5 @@
 //
-//  CatalogRoute+ViewBuilder..swift
+//  FavoritesRoute+ViewBuilder..swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-import SwiftUI
-
-extension NavigationCoordinator where RouteType == CatalogRoute {
+extension NavigationCoordinator where RouteType == FavoritesRoute {
     @ViewBuilder
-    func build(_ route: CatalogRoute) -> some View {
+    func build(_ route: FavoritesRoute) -> some View {
         switch route {
         case .category(_, let name):
             CategoryView(name: name)

@@ -8,14 +8,14 @@
 import Foundation
 
 enum AppTab: String, CaseIterable, Identifiable {
-    case home, catalog, history, profile
+    case home, favorites, history, profile
     
     var id: String { rawValue }
     
     var title: String {
         switch self {
         case .home: return "Главная"
-        case .catalog: return "Каталог"
+        case .favorites: return "Избранное"
         case .history: return "История"
         case .profile: return "Профиль"
         }
@@ -24,7 +24,7 @@ enum AppTab: String, CaseIterable, Identifiable {
     var icon: String {
         switch self {
         case .home: return "house.fill"
-        case .catalog: return "square.grid.2x2.fill"
+        case .favorites: return "star"
         case .history: return "clock"
         case .profile: return "person.fill"
         }

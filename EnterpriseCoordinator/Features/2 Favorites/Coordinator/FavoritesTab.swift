@@ -1,5 +1,5 @@
 //
-//  CatalogTab.swift
+//  FavoritesTab.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct CatalogTab: View {
+struct FavoritesTab: View {
     @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: NavigationCoordinator<CatalogRoute>
+    @ObservedObject var coordinator: NavigationCoordinator<FavoritesRoute>
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            CatalogView(coordinator: coordinator)
-                .navigationDestination(for: CatalogRoute.self) { route in
+            FavoritesView(coordinator: coordinator)
+                .navigationDestination(for: FavoritesRoute.self) { route in
                     coordinator.build(route)
                 }
                 .sheet(item: $coordinator.localSheet) { sheet in

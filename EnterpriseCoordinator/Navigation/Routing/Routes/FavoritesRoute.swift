@@ -1,5 +1,5 @@
 //
-//  CatalogRoute.swift
+//  FavoritesRoute.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CatalogRoute: Route {
+enum FavoritesRoute: Route {
     case category(id: String, name: String)
     case productDetail(id: String)
     case filters
