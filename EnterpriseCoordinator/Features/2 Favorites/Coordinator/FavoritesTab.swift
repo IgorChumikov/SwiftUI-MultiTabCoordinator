@@ -26,3 +26,7 @@ struct FavoritesTab: View {
         }
     }
 }
+
+#Preview {
+    FavoritesTab(coordinator: NavigationCoordinator<FavoritesRoute>())
+}

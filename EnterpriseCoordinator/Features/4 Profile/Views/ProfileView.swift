@@ -47,3 +47,7 @@ struct ProfileView: View {
         .navigationTitle("👤 Профиль")
     }
 }
+
+#Preview {
+    ProfileView(coordinator: NavigationCoordinator<ProfileRoute>())
+}

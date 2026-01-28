@@ -26,3 +26,8 @@ struct HistoryTab: View {
         }
     }
 }
+
+
+#Preview {
+    HistoryTab(coordinator: NavigationCoordinator<HistoryRoute>())
+}

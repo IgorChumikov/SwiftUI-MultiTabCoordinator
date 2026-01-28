@@ -39,3 +39,7 @@ struct FavoritesView: View {
         .navigationTitle("Избранное")
     }
 }
+
+#Preview {
+    FavoritesView(coordinator: NavigationCoordinator<FavoritesRoute>())
+}

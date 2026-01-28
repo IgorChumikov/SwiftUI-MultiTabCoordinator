@@ -45,3 +45,7 @@ struct AppCoordinatorView: View {
         }
     }
 }
+
+#Preview {
+    AppCoordinatorView()
+}
