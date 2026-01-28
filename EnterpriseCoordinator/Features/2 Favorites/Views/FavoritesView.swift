@@ -14,14 +14,17 @@ struct FavoritesView: View {
     var body: some View {
         List {
             Section("Категории") {
-                Button("📱 Смартфоны") {
-                    coordinator.push(.category(id: "1", name: "Смартфоны"))
+                Button("Закладки") {
+                    coordinator.push(.bookmarks)
                 }
-                Button("📦 Товар 789") {
-                    coordinator.push(.productDetail(id: "789"))
+                Button("Папки") {
+                    coordinator.push(.folders)
                 }
-                Button("🎚️ Фильтры") {
-                    coordinator.push(.filters)
+                Button("Документы на контроле") {
+                    coordinator.push(.documentsUnderControl)
+                }
+                Button("Загруженные документы") {
+                    coordinator.push(.uploadedDocuments)
                 }
             }
             

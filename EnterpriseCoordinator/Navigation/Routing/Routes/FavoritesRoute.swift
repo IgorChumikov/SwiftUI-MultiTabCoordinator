@@ -8,15 +8,17 @@
 import Foundation
 
 enum FavoritesRoute: Route {
-    case category(id: String, name: String)
-    case productDetail(id: String)
-    case filters
+    case bookmarks
+    case folders
+    case documentsUnderControl
+    case uploadedDocuments
     
     var id: String {
         switch self {
-        case .category(let id, _): return "cat-\(id)"
-        case .productDetail(let id): return "product-\(id)"
-        case .filters: return "filters"
+        case .bookmarks: return "bookmarks"
+        case .folders: return "folders"
+        case .documentsUnderControl: return "documentsUnderControl"
+        case .uploadedDocuments: return "uploadedDocuments"
         }
     }
 }

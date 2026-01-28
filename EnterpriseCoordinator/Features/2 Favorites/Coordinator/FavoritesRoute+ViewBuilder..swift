@@ -11,12 +11,14 @@ extension NavigationCoordinator where RouteType == FavoritesRoute {
     @ViewBuilder
     func build(_ route: FavoritesRoute) -> some View {
         switch route {
-        case .category(_, let name):
-            CategoryView(name: name)
-        case .productDetail(let id):
-            ProductDetailView(id: id)
-        case .filters:
-            FiltersView()
+        case .bookmarks:
+            FavoritesBookmarks()
+        case .folders:
+            FavoritesFolders()
+        case .documentsUnderControl:
+            FavoritesDocumentsUnderControl()
+        case .uploadedDocuments:
+            FavoritesUploadedDocuments()
         }
     }
 }
