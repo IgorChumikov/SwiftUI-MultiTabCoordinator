@@ -8,27 +8,21 @@
 import Foundation
 
 enum ProfileRoute: Route {
-    // ✅ Старые роуты (не трогаем!)
+    case news
+    case newsDetails(id: String)
+    case codes
+    case codeDocument(id: String)
     case settings
-    case orderHistory
-    case orderDetail(id: String)
-    
-    // ✨ НОВЫЕ роуты для UIKit и SwiftUI
-    case orderHistoryUIKit              // UIKit список заказов
-    case orderDetailUIKit(id: String)   // UIKit детали заказа
-    case completedOrders                // SwiftUI завершенные заказы
+    case aboutApp
     
     var id: String {
         switch self {
-        // Старые
+        case .news: return "news"
+        case .newsDetails(let id): return "news-\(id)"
+        case .codes: return "codes"
+        case .codeDocument(let id): return "code-\(id)"
         case .settings: return "settings"
-        case .orderHistory: return "history"
-        case .orderDetail(let id): return "order-\(id)"
-        
-        // Новые
-        case .orderHistoryUIKit: return "order-history-uikit"
-        case .orderDetailUIKit(let id): return "order-detail-uikit-\(id)"
-        case .completedOrders: return "completed-orders"
+        case .aboutApp: return "about-app"
         }
     }
 }

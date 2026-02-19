@@ -8,43 +8,18 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
     
     var body: some View {
         List {
-            // ✅ Старые пункты меню (не изменились!)
-            Section("Основное") {
-                Button("⚙️ Настройки") {
-                    coordinator.push(.settings)
-                }
-                
-                Button("📋 История заказов (SwiftUI старый)") {
-                    coordinator.push(.orderHistory)
-                }
-            }
-            
-            // ✨ НОВЫЕ пункты меню
-            Section("Новые экраны") {
-                Button("📋 История заказов (UIKit) 🆕") {
-                    coordinator.push(.orderHistoryUIKit)
-                }
-                
-                Button("✅ Завершенные заказы (SwiftUI) 🆕") {
-                    coordinator.push(.completedOrders)
-                }
-            }
-            
-            Section("Отладка") {
-                Text("Path count: \(coordinator.path.count)")
-                    .foregroundStyle(.secondary)
-                if coordinator.path.count > 0 {
-                    Button("⬅️ Pop") { coordinator.pop() }
-                    Button("🏠 Pop to Root") { coordinator.popToRoot() }
-                }
+            Section("Разделы") {
+                Button("Новости") { coordinator.push(.news) }
+                Button("Кодексы") { coordinator.push(.codes) }
+                Button("Настройки приложения") { coordinator.push(.settings) }
+                Button("О программе") { coordinator.push(.aboutApp) }
             }
         }
-        .navigationTitle("👤 Профиль")
+        .navigationTitle("Профиль")
     }
 }
 

@@ -11,30 +11,28 @@ extension NavigationCoordinator where RouteType == ProfileRoute {
     @ViewBuilder
     func build(_ route: ProfileRoute) -> some View {
         switch route {
-        // ✅ Старые роуты (работают как раньше!)
+        case .news:
+            NewsListView(coordinator: self)
+                .toolbar(.hidden, for: .tabBar)
+
+        case .newsDetails(let id):
+            NewsDetailsView(newsId: id)
+                .toolbar(.hidden, for: .tabBar)
+
+        case .codes:
+            CodesListView(coordinator: self)
+                .toolbar(.hidden, for: .tabBar)
+
+        case .codeDocument(let id):
+            CodeDocumentView(codeId: id)
+                .toolbar(.hidden, for: .tabBar)
+
         case .settings:
-            SettingsView()
+            AppSettingsView()
                 .toolbar(.hidden, for: .tabBar)
-            
-        case .orderHistory:
-            OrderHistoryView()
-                .toolbar(.hidden, for: .tabBar)
-            
-        case .orderDetail(let id):
-            OrderDetailView(id: id)
-                .toolbar(.hidden, for: .tabBar)
-        
-        // ✨ НОВЫЕ роуты
-        case .orderHistoryUIKit:
-            OrderHistoryUIKitAssembly(coordinator: self)
-                .toolbar(.hidden, for: .tabBar)
-            
-        case .orderDetailUIKit(let id):
-            OrderDetailUIKitAssembly(coordinator: self, orderId: id)
-                .toolbar(.hidden, for: .tabBar)
-            
-        case .completedOrders:
-            CompletedOrdersView()
+
+        case .aboutApp:
+            AboutAppView()
                 .toolbar(.hidden, for: .tabBar)
         }
     }
