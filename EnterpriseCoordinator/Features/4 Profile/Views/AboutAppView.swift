@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutAppView: View {
     var body: some View {
         List {
-            Section("О программе") {
+            Section("О программе") { 
                 Text("EnterpriseCoordinator")
                     .font(.headline)
                 Text("Демонстрационное приложение для многоуровневой навигации в SwiftUI.")
