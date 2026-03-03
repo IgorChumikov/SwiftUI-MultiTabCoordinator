@@ -24,5 +24,6 @@ struct HomeTab: View {
                     app.buildLocalCover(cover)
                 }
         }
+        .tint(Color(red: 128 / 255, green: 108 / 255, blue: 187 / 255))
     }
 }

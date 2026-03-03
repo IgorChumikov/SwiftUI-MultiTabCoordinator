@@ -14,7 +14,7 @@ enum AppTab: String, CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .home: return "Главная"
+        case .home: return "Главное"
         case .favorites: return "Избранное"
         case .history: return "История"
         case .profile: return "Профиль"
@@ -23,9 +23,9 @@ enum AppTab: String, CaseIterable, Identifiable {
     
     var icon: String {
         switch self {
-        case .home: return "house.fill"
+        case .home: return "briefcase.fill"
         case .favorites: return "star"
-        case .history: return "clock"
+        case .history: return "clock.arrow.circlepath"
         case .profile: return "person.fill"
         }
     }

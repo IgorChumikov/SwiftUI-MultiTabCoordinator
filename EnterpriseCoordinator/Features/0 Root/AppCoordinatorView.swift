@@ -29,13 +29,14 @@ struct AppCoordinatorView: View {
                     Label(AppTab.history.title, systemImage: AppTab.history.icon)
                 }
                 .tag(AppTab.history)
-            
+
             ProfileTab(coordinator: coordinator.profile)
                 .tabItem {
                     Label(AppTab.profile.title, systemImage: AppTab.profile.icon)
                 }
                 .tag(AppTab.profile)
         }
+        .tint(Color(red: 128 / 255, green: 108 / 255, blue: 187 / 255))
         .environmentObject(coordinator)
         .sheet(item: $coordinator.globalSheet) { sheet in
             coordinator.buildGlobalSheet(sheet)

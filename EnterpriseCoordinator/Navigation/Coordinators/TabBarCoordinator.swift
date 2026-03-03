@@ -28,14 +28,6 @@ final class TabBarCoordinator: ObservableObject {
     @Published var globalSheet: GlobalSheet?
     @Published var globalCover: GlobalCover?
     
-    // MARK: - Cross-Tab Navigation
-    
-    func showProduct(id: String) {
-        selectedTab = .home
-        home.popToRoot()
-        home.push(.productDetail(id: id))
-    }
-    
     func showCart() {
         selectedTab = .history
     }

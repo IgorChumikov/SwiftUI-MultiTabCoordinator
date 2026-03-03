@@ -8,15 +8,33 @@
 import Foundation
 
 enum HomeRoute: Route {
-    case productDetail(id: String)
-    case promotions
-    case search(query: String)
-    
+    case newsList
+    case newsDetail(id: String)
+    case codesList
+    case codeDetail(id: String)
+    case referenceList
+    case referenceDetail(id: String)
+    case reviewsList
+    case reviewDetail(id: String)
+
     var id: String {
         switch self {
-        case .productDetail(let id): return "product-\(id)"
-        case .promotions: return "promotions"
-        case .search(let q): return "search-\(q)"
+        case .newsList:
+            return "news-list"
+        case .newsDetail(let id):
+            return "news-detail-\(id)"
+        case .codesList:
+            return "codes-list"
+        case .codeDetail(let id):
+            return "code-detail-\(id)"
+        case .referenceList:
+            return "reference-list"
+        case .referenceDetail(let id):
+            return "reference-detail-\(id)"
+        case .reviewsList:
+            return "reviews-list"
+        case .reviewDetail(let id):
+            return "review-detail-\(id)"
         }
     }
 }
