@@ -32,15 +32,29 @@ struct OrderItem: Identifiable {
 extension Order {
     static var mockOrders: [Order] {
         (1...10).map { i in
-            Order(
+            let date = Date().addingTimeInterval(-TimeInterval(i * 86_400))
+            let totalAmount = Double(i * 1000)
+
+            let status: OrderStatus
+            if i % 3 == 0 {
+                status = .completed
+            } else if i % 2 == 0 {
+                status = .pending
+            } else {
+                status = .cancelled
+            }
+
+            let items = [
+                OrderItem(id: "1", name: "iPhone 15 Pro", price: 89990, quantity: 1),
+                OrderItem(id: "2", name: "AirPods Pro", price: 24990, quantity: 1)
+            ]
+
+            return Order(
                 id: "\(i)",
-                date: Date().addingTimeInterval(-TimeInterval(i * 86400)),
-                totalAmount: Double(i * 1000),
-                status: i % 3 == 0 ? .completed : (i % 2 == 0 ? .pending : .cancelled),
-                items: [
-                    OrderItem(id: "1", name: "iPhone 15 Pro", price: 89990, quantity: 1),
-                    OrderItem(id: "2", name: "AirPods Pro", price: 24990, quantity: 1)
-                ]
+                date: date,
+                totalAmount: totalAmount,
+                status: status,
+                items: items
             )
         }
     }
