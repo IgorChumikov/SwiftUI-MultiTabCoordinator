@@ -7,15 +7,18 @@
 
 import SwiftUI
 
-struct CodesListUIKitAssembly: UIViewControllerRepresentable {
+struct CodesListUIKitAssembly: View {
     let coordinator: NavigationCoordinator<HomeRoute>
 
-    func makeUIViewController(context: Context) -> UIViewController {
-        let viewController = CodesListViewController()
-        viewController.coordinator = coordinator
-        viewController.items = HomeMockData.codes
-        return viewController
+    var body: some View {
+        UIKitViewControllerContainer(
+            makeViewController: {
+                CodesListViewController()
+            },
+            updateViewController: { viewController in
+                viewController.coordinator = coordinator
+                viewController.items = HomeMockData.codes
+            }
+        )
     }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }

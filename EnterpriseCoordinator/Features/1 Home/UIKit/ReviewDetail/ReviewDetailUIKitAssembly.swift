@@ -7,17 +7,20 @@
 
 import SwiftUI
 
-struct ReviewDetailUIKitAssembly: UIViewControllerRepresentable {
+struct ReviewDetailUIKitAssembly: View {
     let coordinator: NavigationCoordinator<HomeRoute>
     let documentID: String
 
-    func makeUIViewController(context: Context) -> UIViewController {
-        let viewController = ReviewDetailViewController()
-        viewController.coordinator = coordinator
-        viewController.documentID = documentID
-        viewController.documents = HomeMockData.reviews
-        return viewController
+    var body: some View {
+        UIKitViewControllerContainer(
+            makeViewController: {
+                ReviewDetailViewController()
+            },
+            updateViewController: { viewController in
+                viewController.coordinator = coordinator
+                viewController.documentID = documentID
+                viewController.documents = HomeMockData.reviews
+            }
+        )
     }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }

@@ -7,16 +7,19 @@
 
 import SwiftUI
 
-struct NewsDetailUIKitAssembly: UIViewControllerRepresentable {
+struct NewsDetailUIKitAssembly: View {
     let coordinator: NavigationCoordinator<HomeRoute>
     let newsID: String
 
-    func makeUIViewController(context: Context) -> UIViewController {
-        let viewController = NewsDetailViewController()
-        viewController.coordinator = coordinator
-        viewController.newsID = newsID
-        return viewController
+    var body: some View {
+        UIKitViewControllerContainer(
+            makeViewController: {
+                NewsDetailViewController()
+            },
+            updateViewController: { viewController in
+                viewController.coordinator = coordinator
+                viewController.newsID = newsID
+            }
+        )
     }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
