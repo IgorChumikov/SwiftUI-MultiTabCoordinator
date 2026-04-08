@@ -28,11 +28,20 @@ final class TabBarCoordinator: ObservableObject {
     @Published var globalSheet: GlobalSheet?
     @Published var globalCover: GlobalCover?
     
+    // MARK: - Public Navigation
+    
     func showCart() {
         selectedTab = .history
     }
     
-    // MARK: - Sheet Presentation
+    // MARK: - DeepLink (Public)
+    
+    func handle(_ url: URL) {
+        guard let deepLink = AppDeepLink(url: url) else { return }
+        handle(deepLink)
+    }
+    
+    // MARK: - Sheet
     
     func showGlobalSheet(_ sheet: GlobalSheet) {
         globalSheet = sheet
@@ -42,7 +51,7 @@ final class TabBarCoordinator: ObservableObject {
         globalSheet = nil
     }
     
-    // MARK: - Full Screen Cover Presentation
+    // MARK: - Full Screen Cover
     
     func showGlobalCover(_ cover: GlobalCover) {
         globalCover = cover
@@ -50,5 +59,21 @@ final class TabBarCoordinator: ObservableObject {
     
     func dismissGlobalCover() {
         globalCover = nil
+    }
+}
+
+// MARK: - DeepLink Handling
+
+private extension TabBarCoordinator {
+    
+    // в Terminal - xcrun simctl openurl booted "enterprise://profile/about"
+    
+    func handle(_ deepLink: AppDeepLink) {
+        switch deepLink {
+        case .profile(let route):
+            selectedTab = .profile
+            profile.popToRoot()
+            profile.push(route)
+        }
     }
 }

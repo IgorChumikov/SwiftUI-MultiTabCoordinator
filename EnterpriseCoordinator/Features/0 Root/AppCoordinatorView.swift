@@ -44,6 +44,9 @@ struct AppCoordinatorView: View {
         .fullScreenCover(item: $coordinator.globalCover) { cover in
             coordinator.buildGlobalCover(cover)
         }
+        .onOpenURL { url in
+            coordinator.handle(url)
+        }
     }
 }
 
