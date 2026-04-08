@@ -66,14 +66,22 @@ final class TabBarCoordinator: ObservableObject {
 
 private extension TabBarCoordinator {
     
-    // в Terminal - xcrun simctl openurl booted "enterprise://profile/about"
-    
     func handle(_ deepLink: AppDeepLink) {
         switch deepLink {
-        case .profile(let route):
+            // Terminal:
+            // xcrun simctl openurl booted "enterprise://profile/about"
+            // or:
+            // xcrun simctl openurl booted "enterprise://about"
+        case .profileAbout:
             selectedTab = .profile
             profile.popToRoot()
-            profile.push(route)
+            profile.push(.aboutApp)
+            // Terminal:
+            // xcrun simctl openurl booted "enterprise://profile/settings"
+        case .profileSettings:
+            selectedTab = .profile
+            profile.popToRoot()
+            profile.push(.settings)
         }
     }
 }

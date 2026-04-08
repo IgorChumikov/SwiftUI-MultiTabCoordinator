@@ -8,7 +8,8 @@
 import Foundation
 
 enum AppDeepLink {
-    case profile(ProfileRoute)
+    case profileAbout
+    case profileSettings
 
     init?(url: URL) {
         guard let scheme = url.scheme?.lowercased(), scheme == "enterprise" else {
@@ -22,13 +23,13 @@ enum AppDeepLink {
 
         switch (host, pathComponents) {
         case ("about", _):
-            self = .profile(.aboutApp)
+            self = .profileAbout
 
         case ("profile", ["about"]):
-            self = .profile(.aboutApp)
+            self = .profileAbout
 
         case ("profile", ["settings"]):
-            self = .profile(.settings)
+            self = .profileSettings
 
         default:
             return nil
