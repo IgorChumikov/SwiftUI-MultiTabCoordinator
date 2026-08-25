@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CodeDocumentView: View {
     let codeId: String
+    let documentService: DocumentServicing
 
     private var code: CodeItem? {
         ProfileMockData.codes.first { $0.id == codeId }
@@ -26,6 +27,12 @@ struct CodeDocumentView: View {
                         Text("Обновлено: \(code.updatedAt.formatted(date: .long, time: .omitted))")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+
+                        if documentService.isAvailableOffline(documentID: codeId) {
+                            Label("Доступно офлайн", systemImage: "arrow.down.circle")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
 
                         Divider()
 
@@ -45,5 +52,5 @@ struct CodeDocumentView: View {
 }
 
 #Preview {
-    CodeDocumentView(codeId: "code-001")
+    CodeDocumentView(codeId: "code-001", documentService: StubDocumentService())
 }

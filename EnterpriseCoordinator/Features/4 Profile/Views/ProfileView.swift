@@ -9,9 +9,15 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
+    let authService: AuthServicing
     
     var body: some View {
         List {
+            Section("Аккаунт") {
+                Text(authService.isAuthorized ? "Вы вошли в аккаунт" : "Вы не авторизованы")
+                    .foregroundStyle(.secondary)
+            }
+
             Section("Разделы") {
                 Button("Новости") { coordinator.push(.news) }
                 Button("Кодексы") { coordinator.push(.codes) }
@@ -24,5 +30,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(coordinator: NavigationCoordinator<ProfileRoute>())
+    ProfileView(coordinator: NavigationCoordinator<ProfileRoute>(),
+                authService: StubAuthService())
 }

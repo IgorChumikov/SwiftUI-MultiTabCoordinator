@@ -9,28 +9,33 @@ import SwiftUI
 
 struct AppCoordinatorView: View {
     @StateObject private var coordinator = TabBarCoordinator()
+    let container: AppContainer
     
     var body: some View {
         TabView(selection: $coordinator.selectedTab) {
-            HomeTab(coordinator: coordinator.home)
+            HomeTab(coordinator: coordinator.home,
+                    router: HomeRouter(dependencies: container, coordinator: coordinator.home))
                 .tabItem {
                     Label(AppTab.home.title, systemImage: AppTab.home.icon)
                 }
                 .tag(AppTab.home)
             
-            FavoritesTab(coordinator: coordinator.favorites)
+            FavoritesTab(coordinator: coordinator.favorites,
+                         router: FavoritesRouter(dependencies: container, coordinator: coordinator.favorites))
                 .tabItem {
                     Label(AppTab.favorites.title, systemImage: AppTab.favorites.icon)
                 }
                 .tag(AppTab.favorites)
             
-            HistoryTab(coordinator: coordinator.history)
+            HistoryTab(coordinator: coordinator.history,
+                       router: HistoryRouter(dependencies: container, coordinator: coordinator.history))
                 .tabItem {
                     Label(AppTab.history.title, systemImage: AppTab.history.icon)
                 }
                 .tag(AppTab.history)
 
-            ProfileTab(coordinator: coordinator.profile)
+            ProfileTab(coordinator: coordinator.profile,
+                       router: ProfileRouter(dependencies: container, coordinator: coordinator.profile))
                 .tabItem {
                     Label(AppTab.profile.title, systemImage: AppTab.profile.icon)
                 }
@@ -39,10 +44,10 @@ struct AppCoordinatorView: View {
         .tint(Color(red: 128 / 255, green: 108 / 255, blue: 187 / 255))
         .environmentObject(coordinator)
         .sheet(item: $coordinator.globalSheet) { sheet in
-            coordinator.buildGlobalSheet(sheet)
+            GlobalModalRouter.view(for: sheet)
         }
         .fullScreenCover(item: $coordinator.globalCover) { cover in
-            coordinator.buildGlobalCover(cover)
+            GlobalModalRouter.view(for: cover)
         }
         .onOpenURL { url in
             coordinator.handle(url)
@@ -51,5 +56,5 @@ struct AppCoordinatorView: View {
 }
 
 #Preview {
-    AppCoordinatorView()
+    AppCoordinatorView(container: .preview)
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct NewsDetailUIKitAssembly: View {
     let coordinator: NavigationCoordinator<HomeRoute>
     let newsID: String
+    let documentService: DocumentServicing
 
     var body: some View {
         UIKitViewControllerContainer(
@@ -18,6 +19,7 @@ struct NewsDetailUIKitAssembly: View {
             },
             updateViewController: { viewController in
                 viewController.coordinator = coordinator
+                viewController.documentService = documentService
                 viewController.newsID = newsID
             }
         )

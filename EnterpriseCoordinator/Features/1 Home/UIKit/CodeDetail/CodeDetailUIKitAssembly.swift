@@ -10,6 +10,7 @@ import SwiftUI
 struct CodeDetailUIKitAssembly: View {
     let coordinator: NavigationCoordinator<HomeRoute>
     let documentID: String
+    let documentService: DocumentServicing
 
     var body: some View {
         UIKitViewControllerContainer(
@@ -18,6 +19,7 @@ struct CodeDetailUIKitAssembly: View {
             },
             updateViewController: { viewController in
                 viewController.coordinator = coordinator
+                viewController.documentService = documentService
                 viewController.documentID = documentID
                 viewController.documents = HomeMockData.codes
             }

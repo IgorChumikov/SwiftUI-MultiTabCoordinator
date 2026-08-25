@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewsDetailsView: View {
     let newsId: String
+    let documentService: DocumentServicing
 
     private var news: NewsItem? {
         ProfileMockData.news.first { $0.id == newsId }
@@ -27,6 +28,12 @@ struct NewsDetailsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
+                        if documentService.isAvailableOffline(documentID: newsId) {
+                            Label("Доступно офлайн", systemImage: "arrow.down.circle")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
                         Text(news.details)
                             .font(.body)
                     }
@@ -43,5 +50,5 @@ struct NewsDetailsView: View {
 }
 
 #Preview {
-    NewsDetailsView(newsId: "news-001")
+    NewsDetailsView(newsId: "news-001", documentService: StubDocumentService())
 }

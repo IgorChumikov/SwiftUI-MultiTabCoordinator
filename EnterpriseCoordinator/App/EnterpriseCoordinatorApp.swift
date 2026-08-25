@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct EnterpriseCoordinatorApp: App {
+    private let container = AppContainer.live
+
     init() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -22,7 +24,7 @@ struct EnterpriseCoordinatorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppCoordinatorView()
+            AppCoordinatorView(container: container)
         }
     }
 }

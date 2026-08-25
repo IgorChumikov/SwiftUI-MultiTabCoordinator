@@ -5,7 +5,7 @@
 //  Created by Игорь Чумиков on 02.12.2025.
 //
 
-import SwiftUI
+import Foundation
 
 enum LocalSheet: Identifiable {
     case onboarding
@@ -17,20 +17,6 @@ enum LocalSheet: Identifiable {
         case .onboarding: return "onboarding"
         case .camera: return "camera"
         case .videoPlayer: return "video"
-        }
-    }
-}
-
-extension TabBarCoordinator {
-    @ViewBuilder
-    func buildLocalSheet(_ cover: LocalSheet) -> some View {
-        switch cover {
-        case .onboarding:
-            OnboardingView()
-        case .camera:
-            CameraView()
-        case .videoPlayer(let url):
-            VideoPlayerView(url: url)
         }
     }
 }

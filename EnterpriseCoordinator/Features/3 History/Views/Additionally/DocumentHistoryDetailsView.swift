@@ -9,7 +9,6 @@ import SwiftUI
 
 struct DocumentHistoryDetailsView: View {
     
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     let document: DocumentHistory
     

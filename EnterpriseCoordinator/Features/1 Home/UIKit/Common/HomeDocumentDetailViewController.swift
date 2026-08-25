@@ -9,6 +9,7 @@ import UIKit
 
 class HomeDocumentDetailViewController: UIViewController {
     var coordinator: NavigationCoordinator<HomeRoute>!
+    var documentService: DocumentServicing!
     var documentID: String!
     var documents: [HomeDocumentItem] = []
 
@@ -50,6 +51,15 @@ class HomeDocumentDetailViewController: UIViewController {
         bodyLabel.text = document.content
 
         stackView.addArrangedSubview(titleLabel)
+
+        if documentService?.isAvailableOffline(documentID: documentID) == true {
+            let offlineLabel = UILabel()
+            offlineLabel.font = .systemFont(ofSize: 13, weight: .medium)
+            offlineLabel.textColor = HomeUIKitStyle.secondaryText
+            offlineLabel.text = "Доступно офлайн"
+            stackView.addArrangedSubview(offlineLabel)
+        }
+
         stackView.addArrangedSubview(makeHomeDivider())
         stackView.addArrangedSubview(bodyLabel)
 

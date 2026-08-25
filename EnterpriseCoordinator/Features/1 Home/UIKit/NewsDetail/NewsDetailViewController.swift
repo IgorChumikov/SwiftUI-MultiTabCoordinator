@@ -9,6 +9,7 @@ import UIKit
 
 final class NewsDetailViewController: UIViewController {
     var coordinator: NavigationCoordinator<HomeRoute>!
+    var documentService: DocumentServicing!
     var newsID: String!
 
     override func viewDidLoad() {
@@ -61,6 +62,14 @@ final class NewsDetailViewController: UIViewController {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(subtitleLabel)
         stackView.addArrangedSubview(dateLabel)
+
+        if documentService?.isAvailableOffline(documentID: newsID) == true {
+            let offlineLabel = UILabel()
+            offlineLabel.font = .systemFont(ofSize: 13, weight: .medium)
+            offlineLabel.textColor = HomeUIKitStyle.secondaryText
+            offlineLabel.text = "Доступно офлайн"
+            stackView.addArrangedSubview(offlineLabel)
+        }
         stackView.addArrangedSubview(makeHomeDivider())
         stackView.addArrangedSubview(bodyLabel)
 

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
     
     private let documents: [DocumentHistory] = [

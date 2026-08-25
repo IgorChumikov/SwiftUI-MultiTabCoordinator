@@ -1,11 +1,11 @@
 //
-//  GlobalCover.swift
+//  LocalCover.swift
 //  EnterpriseCoordinator
 //
 //  Created by Игорь Чумиков on 02.12.2025.
 //
 
-import SwiftUI
+import Foundation
 
 enum LocalCover: Identifiable {
     case login
@@ -17,17 +17,4 @@ enum LocalCover: Identifiable {
         case .quickView(let id): return "quick-\(id)"
         }
     }
-}
-
-extension TabBarCoordinator {
-    @ViewBuilder
-    func buildLocalCover(_ modal: LocalCover) -> some View {
-        switch modal {
-        case .login:
-            LoginView()
-        case .quickView(let id):
-            QuickView(productId: id)
-        }
-    }
-    
 }

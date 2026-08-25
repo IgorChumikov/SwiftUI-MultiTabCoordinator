@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct HistoryTab: View {
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
+    let router: HistoryRouter
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            HistoryView(coordinator: coordinator)
+            router.rootView()
                 .navigationDestination(for: HistoryRoute.self) { route in
-                    coordinator.build(route)
+                    router.view(for: route)
                 }
                 .sheet(item: $coordinator.localSheet) { sheet in
-                    app.buildLocalSheet(sheet)
+                    LocalModalRouter.view(for: sheet)
                 }
                 .fullScreenCover(item: $coordinator.localCover) { cover in
-                    app.buildLocalCover(cover)
+                    LocalModalRouter.view(for: cover)
                 }
         }
     }
@@ -29,5 +29,7 @@ struct HistoryTab: View {
 
 
 #Preview {
-    HistoryTab(coordinator: NavigationCoordinator<HistoryRoute>())
+    let coordinator = NavigationCoordinator<HistoryRoute>()
+    HistoryTab(coordinator: coordinator,
+               router: HistoryRouter(dependencies: AppContainer.preview, coordinator: coordinator))
 }
