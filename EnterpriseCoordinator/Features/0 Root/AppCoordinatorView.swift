@@ -10,6 +10,10 @@ import SwiftUI
 struct AppCoordinatorView: View {
     @StateObject private var coordinator = TabBarCoordinator()
     let container: AppContainer
+
+    private var globalModalRouter: GlobalModalRouter {
+        GlobalModalRouter(dependencies: container)
+    }
     
     var body: some View {
         TabView(selection: $coordinator.selectedTab) {
@@ -44,10 +48,10 @@ struct AppCoordinatorView: View {
         .tint(Color(red: 128 / 255, green: 108 / 255, blue: 187 / 255))
         .environmentObject(coordinator)
         .sheet(item: $coordinator.globalSheet) { sheet in
-            GlobalModalRouter.view(for: sheet)
+            globalModalRouter.view(for: sheet)
         }
         .fullScreenCover(item: $coordinator.globalCover) { cover in
-            GlobalModalRouter.view(for: cover)
+            globalModalRouter.view(for: cover)
         }
         .onOpenURL { url in
             coordinator.handle(url)

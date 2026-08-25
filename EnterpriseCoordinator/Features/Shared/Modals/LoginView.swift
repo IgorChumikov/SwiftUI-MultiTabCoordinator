@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    let authService: AuthServicing
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -15,7 +16,8 @@ struct LoginView: View {
             VStack(spacing: 20) {
                 Text("🔐")
                     .font(.system(size: 80))
-                Text("Вход в аккаунт")
+
+                Text(authService.isAuthorized ? "Вы уже вошли" : "Вход в аккаунт")
                     .font(.title)
                 
                 Button("Закрыть") {
@@ -27,4 +29,8 @@ struct LoginView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+}
+
+#Preview {
+    LoginView(authService: StubAuthService())
 }

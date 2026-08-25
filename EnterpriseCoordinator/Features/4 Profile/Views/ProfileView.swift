@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
     let authService: AuthServicing
     
@@ -16,6 +17,16 @@ struct ProfileView: View {
             Section("Аккаунт") {
                 Text(authService.isAuthorized ? "Вы вошли в аккаунт" : "Вы не авторизованы")
                     .foregroundStyle(.secondary)
+
+                // Глобальная модалка: перекрывает всё приложение,
+                // не принадлежит табу «Профиль».
+                Button("Войти") {
+                    app.showGlobalCover(.login)
+                }
+
+                Button("Показать онбординг") {
+                    app.showGlobalSheet(.onboarding)
+                }
             }
 
             Section("Разделы") {
@@ -32,4 +43,5 @@ struct ProfileView: View {
 #Preview {
     ProfileView(coordinator: NavigationCoordinator<ProfileRoute>(),
                 authService: StubAuthService())
+        .environmentObject(TabBarCoordinator())
 }

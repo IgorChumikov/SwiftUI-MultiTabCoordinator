@@ -7,26 +7,22 @@
 
 import SwiftUI
 
-enum GlobalModalRouter {
+struct GlobalModalRouter {
+    let dependencies: ModalDependencies
+
     @ViewBuilder
-    static func view(for sheet: GlobalSheet) -> some View {
+    func view(for sheet: GlobalSheet) -> some View {
         switch sheet {
         case .onboarding:
             OnboardingView()
-        case .camera:
-            CameraView()
-        case .videoPlayer(let url):
-            VideoPlayerView(url: url)
         }
     }
 
     @ViewBuilder
-    static func view(for cover: GlobalCover) -> some View {
+    func view(for cover: GlobalCover) -> some View {
         switch cover {
         case .login:
-            LoginView()
-        case .quickView(let id):
-            QuickView(productId: id)
+            LoginView(authService: dependencies.authService)
         }
     }
 }

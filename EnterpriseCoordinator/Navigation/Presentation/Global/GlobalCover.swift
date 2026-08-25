@@ -7,14 +7,14 @@
 
 import Foundation
 
+/// Модалка уровня приложения: перекрывает всё, переживает переключение таба,
+/// не принадлежит ни одной фиче. Показывается через `TabBarCoordinator`.
 enum GlobalCover: Identifiable {
     case login
-    case quickView(productId: String)
     
     var id: String {
         switch self {
         case .login: return "login"
-        case .quickView(let id): return "quick-\(id)"
         }
     }
 }

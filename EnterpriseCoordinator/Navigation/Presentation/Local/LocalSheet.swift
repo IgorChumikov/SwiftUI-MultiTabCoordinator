@@ -7,14 +7,13 @@
 
 import Foundation
 
+/// Модалка, принадлежащая сценарию внутри таба. См. `LocalCover`.
 enum LocalSheet: Identifiable {
-    case onboarding
     case camera
     case videoPlayer(url: String)
     
     var id: String {
         switch self {
-        case .onboarding: return "onboarding"
         case .camera: return "camera"
         case .videoPlayer: return "video"
         }

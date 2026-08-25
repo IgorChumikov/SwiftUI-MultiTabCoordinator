@@ -64,6 +64,16 @@ struct HomeView: View {
 
                 Spacer(minLength: 8)
 
+                // Локальная модалка: сканирование принадлежит сценарию этого таба.
+                Button {
+                    coordinator.showLocalSheet(.camera)
+                } label: {
+                    Image(systemName: "camera.viewfinder")
+                        .font(.system(size: 25, weight: .medium))
+                        .foregroundStyle(accentColor.opacity(0.75))
+                }
+                .buttonStyle(.plain)
+
                 Button(action: {}) {
                     Image(systemName: "line.3.horizontal")
                         .font(.system(size: 27, weight: .medium))
@@ -175,6 +185,14 @@ struct HomeView: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .contextMenu {
+                    // Локальная модалка: быстрый просмотр живёт вместе с табом.
+                    Button {
+                        coordinator.showLocalCover(.quickView(productId: item.id))
+                    } label: {
+                        Label("Быстрый просмотр", systemImage: "eye")
+                    }
+                }
 
                 if index < items.count - 1 {
                     divider

@@ -7,13 +7,13 @@
 
 import Foundation
 
+/// Модалка, принадлежащая сценарию внутри таба: живёт вместе с этим табом
+/// и показывается через его `NavigationCoordinator`.
 enum LocalCover: Identifiable {
-    case login
     case quickView(productId: String)
     
     var id: String {
         switch self {
-        case .login: return "login"
         case .quickView(let id): return "quick-\(id)"
         }
     }

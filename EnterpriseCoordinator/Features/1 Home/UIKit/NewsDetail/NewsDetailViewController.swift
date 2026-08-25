@@ -88,5 +88,12 @@ final class NewsDetailViewController: UIViewController {
                 stackView.addArrangedSubview(button)
             }
         }
+
+        // Локальная модалка, инициированная из UIKit-экрана.
+        stackView.addArrangedSubview(makeHomeDivider())
+        let videoButton = makeHomeLinkButton(title: "Смотреть видеообзор") { [weak self] in
+            self?.coordinator.showLocalSheet(.videoPlayer(url: "https://example.com/\(newsID).mp4"))
+        }
+        stackView.addArrangedSubview(videoButton)
     }
 }

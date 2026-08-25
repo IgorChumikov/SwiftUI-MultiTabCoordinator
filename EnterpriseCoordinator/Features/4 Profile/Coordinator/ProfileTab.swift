@@ -31,4 +31,5 @@ struct ProfileTab: View {
     let coordinator = NavigationCoordinator<ProfileRoute>()
     ProfileTab(coordinator: coordinator,
                router: ProfileRouter(dependencies: AppContainer.preview, coordinator: coordinator))
+        .environmentObject(TabBarCoordinator())
 }

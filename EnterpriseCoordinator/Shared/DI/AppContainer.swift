@@ -8,9 +8,13 @@
 import Foundation
 
 /// Единственная точка сборки зависимостей приложения (composition root).
-/// Конформится сразу ко всем узким `*Dependencies`-протоколам фич —
+/// Конформится сразу всем узким `*Dependencies`-протоколам —
 /// каждый Router видит только то, что объявлено в его собственном протоколе.
-struct AppContainer: HomeDependencies, FavoritesDependencies, HistoryDependencies, ProfileDependencies {
+struct AppContainer: HomeDependencies,
+                     FavoritesDependencies,
+                     HistoryDependencies,
+                     ProfileDependencies,
+                     ModalDependencies {
     let documentService: DocumentServicing
     let analytics: AnalyticsServicing
     let authService: AuthServicing

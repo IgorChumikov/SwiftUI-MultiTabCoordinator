@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-/// Резолв local-модалок. Общий для всех табов, потому что сами типы
-/// `LocalSheet`/`LocalCover` тоже общие, а не свои у каждой фичи.
+/// Общий для всех табов: типы `LocalSheet`/`LocalCover` тоже общие.
+/// Остался статическим — этим экранам сервисы пока не нужны,
+/// а хранить неиспользуемые зависимости смысла нет.
 enum LocalModalRouter {
     @ViewBuilder
     static func view(for sheet: LocalSheet) -> some View {
         switch sheet {
-        case .onboarding:
-            OnboardingView()
         case .camera:
             CameraView()
         case .videoPlayer(let url):
@@ -25,8 +24,6 @@ enum LocalModalRouter {
     @ViewBuilder
     static func view(for cover: LocalCover) -> some View {
         switch cover {
-        case .login:
-            LoginView()
         case .quickView(let id):
             QuickView(productId: id)
         }
