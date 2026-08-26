@@ -17,7 +17,7 @@ final class TabBarCoordinator: ObservableObject {
     @Published var selectedTab: AppTab = .home {
         didSet {
             guard oldValue != selectedTab else { return }
-            onEvent?(.selectedTab(selectedTab))
+            onEvent?(.selectedTab(selectedTab, isAtRoot: isAtRoot(selectedTab)))
         }
     }
     
@@ -39,6 +39,19 @@ final class TabBarCoordinator: ObservableObject {
     /// сам координатор.
     var onEvent: ((TabBarEvent) -> Void)?
     
+    // MARK: - Tab Selection
+
+    /// Точка входа для таб-бара. Отдельный метод нужен, чтобы отличить
+    /// повторный тап по активному табу от переключения: присваивание того же
+    /// значения `selectedTab` не вызывает `didSet`, и событие потерялось бы.
+    func select(_ tab: AppTab) {
+        guard tab != selectedTab else {
+            onEvent?(.reselectedTab(tab, isAtRoot: isAtRoot(tab)))
+            return
+        }
+        selectedTab = tab
+    }
+
     // MARK: - Public Navigation
     
     func showCart() {
@@ -72,6 +85,21 @@ final class TabBarCoordinator: ObservableObject {
     
     func dismissGlobalCover() {
         globalCover = nil
+    }
+}
+
+// MARK: - Stack State
+
+private extension TabBarCoordinator {
+
+    /// Пустой ли стек у таба, то есть окажется ли пользователь на его корне.
+    func isAtRoot(_ tab: AppTab) -> Bool {
+        switch tab {
+        case .home: return home.path.isEmpty
+        case .favorites: return favorites.path.isEmpty
+        case .history: return history.path.isEmpty
+        case .profile: return profile.path.isEmpty
+        }
     }
 }
 

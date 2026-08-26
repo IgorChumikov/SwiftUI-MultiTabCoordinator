@@ -40,8 +40,13 @@ struct FavoritesRouter: Router {
                 analytics.track("favorites.modal.\(sheet.analyticsName)")
             case .presentedCover(let cover):
                 analytics.track("favorites.modal.\(cover.analyticsName)")
-            case .popped, .poppedToRoot:
-                break
+            case .popped(let remaining):
+                // Возврат к корню таба — отдельное событие. Промежуточные
+                // возвраты не считаем: экран уже был засчитан при переходе
+                // вперёд.
+                if remaining == 0 {
+                    analytics.track(AppTab.favorites.rootScreenEvent)
+                }
             }
         }
     }

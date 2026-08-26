@@ -32,7 +32,13 @@ private struct AppTabsView: View {
     @ObservedObject var coordinator: TabBarCoordinator
 
     var body: some View {
-        TabView(selection: $coordinator.selectedTab) {
+        // Биндинг вручную, а не `$coordinator.selectedTab`: SwiftUI зовёт
+        // сеттер и при тапе по уже активному табу, а присваивание того же
+        // значения не вызвало бы `didSet` — повторный тап потерялся бы.
+        TabView(selection: Binding(
+            get: { coordinator.selectedTab },
+            set: { coordinator.select($0) }
+        )) {
             HomeTab(coordinator: coordinator.home, router: composition.home)
                 .tabItem {
                     Label(AppTab.home.title, systemImage: AppTab.home.icon)

@@ -72,8 +72,15 @@ private extension AppComposition {
 
         coordinator.onEvent = { event in
             switch event {
-            case .selectedTab(let tab):
+            case .selectedTab(let tab, let isAtRoot),
+                 .reselectedTab(let tab, let isAtRoot):
                 analytics.track("tab.\(tab.rawValue)")
+                // Повторный тап по активному табу тоже считается возвратом:
+                // на вложенных экранах Главной таб-бар скрыт, поэтому тапнуть
+                // по нему можно только находясь на корне.
+                if isAtRoot {
+                    analytics.track(tab.rootScreenEvent)
+                }
             case .presentedSheet(let sheet):
                 analytics.track("modal.global.\(sheet.analyticsName)")
             case .presentedCover(let cover):
@@ -84,5 +91,6 @@ private extension AppComposition {
         // Стартовый таб выставлен по умолчанию и `didSet` не вызывает,
         // поэтому первое открытие фиксируем явно.
         analytics.track("tab.\(coordinator.selectedTab.rawValue)")
+        analytics.track(coordinator.selectedTab.rootScreenEvent)
     }
 }

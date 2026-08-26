@@ -64,11 +64,13 @@ struct HomeRouter: Router {
                 analytics.track("home.modal.\(sheet.analyticsName)")
             case .presentedCover(let cover):
                 analytics.track("home.modal.\(cover.analyticsName)")
-            case .popped, .poppedToRoot:
-                // Возврат назад отдельным событием не считаем: экран уже был
-                // засчитан при переходе вперёд. Если продукту понадобится
-                // «просмотр экрана» с учётом возвратов — трекать здесь.
-                break
+            case .popped(let remaining):
+                // Возврат к корню таба — отдельное событие. Промежуточные
+                // возвраты не считаем: экран уже был засчитан при переходе
+                // вперёд.
+                if remaining == 0 {
+                    analytics.track(AppTab.home.rootScreenEvent)
+                }
             }
         }
     }

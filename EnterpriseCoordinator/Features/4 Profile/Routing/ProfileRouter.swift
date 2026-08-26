@@ -55,8 +55,13 @@ struct ProfileRouter: Router {
                 analytics.track("profile.modal.\(sheet.analyticsName)")
             case .presentedCover(let cover):
                 analytics.track("profile.modal.\(cover.analyticsName)")
-            case .popped, .poppedToRoot:
-                break
+            case .popped(let remaining):
+                // Возврат к корню таба — отдельное событие. Промежуточные
+                // возвраты не считаем: экран уже был засчитан при переходе
+                // вперёд.
+                if remaining == 0 {
+                    analytics.track(AppTab.profile.rootScreenEvent)
+                }
             }
         }
     }

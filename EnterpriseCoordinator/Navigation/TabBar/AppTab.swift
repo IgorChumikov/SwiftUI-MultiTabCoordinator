@@ -30,3 +30,10 @@ enum AppTab: String, CaseIterable, Identifiable {
         }
     }
 }
+
+extension AppTab {
+    /// Имя события «пользователь оказался на корневом экране таба».
+    /// Задано в одном месте, потому что его пишут и роутер фичи (возврат
+    /// по стеку), и composition root (переключение или повторный тап по табу).
+    var rootScreenEvent: String { "\(rawValue).root" }
+}

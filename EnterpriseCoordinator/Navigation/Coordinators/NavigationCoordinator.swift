@@ -14,7 +14,16 @@ final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     
     // MARK: - Published Properties
     
-    @Published var path = NavigationPath()
+    @Published var path = NavigationPath() {
+        didSet {
+            // Уменьшение стека ловим здесь, а не в `pop()`: системная кнопка
+            // «назад» и свайп меняют `path` через биндинг напрямую, минуя
+            // методы координатора. Рост стека обрабатывает `push(_:)` —
+            // только он знает, какой именно маршрут добавлен.
+            guard path.count < oldValue.count else { return }
+            onEvent?(.popped(remaining: path.count))
+        }
+    }
     
     // MARK: - Local Presentation
     
@@ -41,13 +50,11 @@ final class NavigationCoordinator<RouteType: Route>: ObservableObject {
     func pop() {
         guard !path.isEmpty else { return }
         path.removeLast()
-        onEvent?(.popped)
     }
     
     func popToRoot() {
         guard !path.isEmpty else { return }
         path.removeLast(path.count)
-        onEvent?(.poppedToRoot)
     }
     
     // MARK: - Sheet Presentation
