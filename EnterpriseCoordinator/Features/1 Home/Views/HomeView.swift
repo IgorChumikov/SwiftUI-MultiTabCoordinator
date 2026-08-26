@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
 
     private let backgroundColor = Color(red: 240 / 255, green: 240 / 255, blue: 242 / 255)
     private let headerColor = Color(red: 238 / 255, green: 235 / 255, blue: 244 / 255)
@@ -66,7 +66,7 @@ struct HomeView: View {
 
                 // Локальная модалка: сканирование принадлежит сценарию этого таба.
                 Button {
-                    coordinator.showLocalSheet(.camera)
+                    navigator.openScanner()
                 } label: {
                     Image(systemName: "camera.viewfinder")
                         .font(.system(size: 25, weight: .medium))
@@ -126,7 +126,7 @@ struct HomeView: View {
 
             ForEach(Array(HomeMockData.newsPreview.enumerated()), id: \.element.id) { index, item in
                 Button {
-                    coordinator.push(.newsList)
+                    navigator.openSection(.news)
                 } label: {
                     VStack(alignment: .leading, spacing: 12) {
                         if let eyebrow = item.eyebrow {
@@ -174,7 +174,7 @@ struct HomeView: View {
 
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 Button {
-                    openSection(kind)
+                    navigator.openSection(kind)
                 } label: {
                     Text(item.title)
                         .font(.system(size: 16, weight: .regular))
@@ -188,7 +188,7 @@ struct HomeView: View {
                 .contextMenu {
                     // Локальная модалка: быстрый просмотр живёт вместе с табом.
                     Button {
-                        coordinator.showLocalCover(.quickView(productId: item.id))
+                        navigator.openQuickView(documentID: item.id)
                     } label: {
                         Label("Быстрый просмотр", systemImage: "eye")
                     }
@@ -206,7 +206,7 @@ struct HomeView: View {
     private func sectionHeader(kind: HomeSectionKind) -> some View {
         HStack(spacing: 14) {
             Button {
-                openSection(kind)
+                navigator.openSection(kind)
             } label: {
                 HStack(spacing: 14) {
                     Image(systemName: kind.iconName)
@@ -223,7 +223,7 @@ struct HomeView: View {
             Spacer()
 
             Button(kind.actionTitle) {
-                openSection(kind)
+                navigator.openSection(kind)
             }
             .font(.system(size: 17, weight: .medium))
             .foregroundStyle(Color(red: 46 / 255, green: 42 / 255, blue: 207 / 255))
@@ -237,19 +237,6 @@ struct HomeView: View {
         Rectangle()
             .fill(Color.black.opacity(0.11))
             .frame(height: 1)
-    }
-
-    private func openSection(_ kind: HomeSectionKind) {
-        switch kind {
-        case .news:
-            coordinator.push(.newsList)
-        case .codes:
-            coordinator.push(.codesList)
-        case .reference:
-            coordinator.push(.referenceList)
-        case .reviews:
-            coordinator.push(.reviewsList)
-        }
     }
 }
 
@@ -269,6 +256,6 @@ private extension View {
 
 #Preview {
     NavigationStack {
-        HomeView(coordinator: NavigationCoordinator<HomeRoute>())
+        HomeView(navigator: NavigationCoordinator<HomeRoute>())
     }
 }

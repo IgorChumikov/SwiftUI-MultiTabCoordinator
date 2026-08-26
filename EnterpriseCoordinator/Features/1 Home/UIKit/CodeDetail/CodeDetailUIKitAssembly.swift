@@ -8,20 +8,17 @@
 import SwiftUI
 
 struct CodeDetailUIKitAssembly: View {
-    let coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
     let documentID: String
     let documentService: DocumentServicing
 
     var body: some View {
         UIKitViewControllerContainer(
             makeViewController: {
-                CodeDetailViewController()
-            },
-            updateViewController: { viewController in
-                viewController.coordinator = coordinator
-                viewController.documentService = documentService
-                viewController.documentID = documentID
-                viewController.documents = HomeMockData.codes
+                CodeDetailViewController(navigator: navigator,
+                   documentService: documentService,
+                   documentID: documentID,
+                   documents: HomeMockData.codes)
             }
         )
     }

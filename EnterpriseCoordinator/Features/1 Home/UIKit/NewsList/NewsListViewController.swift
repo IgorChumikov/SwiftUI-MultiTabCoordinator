@@ -8,8 +8,19 @@
 import UIKit
 
 final class NewsListViewController: UITableViewController {
-    var coordinator: NavigationCoordinator<HomeRoute>!
-    var items: [HomeNewsArticle] = []
+    private let navigator: HomeNavigating
+    private let items: [HomeNewsArticle]
+
+    init(navigator: HomeNavigating, items: [HomeNewsArticle]) {
+        self.navigator = navigator
+        self.items = items
+        super.init(style: .plain)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +54,6 @@ final class NewsListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        coordinator.push(.newsDetail(id: items[indexPath.row].id))
+        navigator.openDocument(id: items[indexPath.row].id, in: .news)
     }
 }

@@ -8,8 +8,19 @@
 import UIKit
 
 final class CodesListViewController: UITableViewController {
-    var coordinator: NavigationCoordinator<HomeRoute>!
-    var items: [HomeDocumentItem] = []
+    private let navigator: HomeNavigating
+    private let items: [HomeDocumentItem]
+
+    init(navigator: HomeNavigating, items: [HomeDocumentItem]) {
+        self.navigator = navigator
+        self.items = items
+        super.init(style: .plain)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +38,6 @@ final class CodesListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        coordinator.push(.codeDetail(id: items[indexPath.row].id))
+        navigator.openDocument(id: items[indexPath.row].id, in: .codes)
     }
 }

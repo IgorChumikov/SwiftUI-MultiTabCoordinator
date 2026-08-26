@@ -9,6 +9,6 @@ import UIKit
 
 final class ReferenceDetailViewController: HomeDocumentDetailViewController {
     override func openRelatedDocument(id: String) {
-        coordinator.push(.referenceDetail(id: id))
+        navigator.openDocument(id: id, in: .reference)
     }
 }

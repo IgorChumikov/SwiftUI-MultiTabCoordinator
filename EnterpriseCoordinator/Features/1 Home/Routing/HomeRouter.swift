@@ -13,41 +13,41 @@ struct HomeRouter: Router {
 
     @ViewBuilder
     func rootView() -> some View {
-        HomeView(coordinator: coordinator)
+        HomeView(navigator: coordinator)
     }
 
     @ViewBuilder
     func view(for route: HomeRoute) -> some View {
         switch route {
         case .newsList:
-            NewsListUIKitAssembly(coordinator: coordinator)
+            NewsListUIKitAssembly(navigator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
         case .newsDetail(let id):
-            NewsDetailUIKitAssembly(coordinator: coordinator,
+            NewsDetailUIKitAssembly(navigator: coordinator,
                                     newsID: id,
                                     documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
         case .codesList:
-            CodesListUIKitAssembly(coordinator: coordinator)
+            CodesListUIKitAssembly(navigator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
         case .codeDetail(let id):
-            CodeDetailUIKitAssembly(coordinator: coordinator,
+            CodeDetailUIKitAssembly(navigator: coordinator,
                                     documentID: id,
                                     documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
         case .referenceList:
-            ReferenceListUIKitAssembly(coordinator: coordinator)
+            ReferenceListUIKitAssembly(navigator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
         case .referenceDetail(let id):
-            ReferenceDetailUIKitAssembly(coordinator: coordinator,
+            ReferenceDetailUIKitAssembly(navigator: coordinator,
                                          documentID: id,
                                          documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
         case .reviewsList:
-            ReviewsListUIKitAssembly(coordinator: coordinator)
+            ReviewsListUIKitAssembly(navigator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
         case .reviewDetail(let id):
-            ReviewDetailUIKitAssembly(coordinator: coordinator,
+            ReviewDetailUIKitAssembly(navigator: coordinator,
                                       documentID: id,
                                       documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)

@@ -8,16 +8,28 @@
 import UIKit
 
 final class NewsDetailViewController: UIViewController {
-    var coordinator: NavigationCoordinator<HomeRoute>!
-    var documentService: DocumentServicing!
-    var newsID: String!
+    private let navigator: HomeNavigating
+    private let documentService: DocumentServicing
+    private let newsID: String
+
+    init(navigator: HomeNavigating, documentService: DocumentServicing, newsID: String) {
+        self.navigator = navigator
+        self.documentService = documentService
+        self.newsID = newsID
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Новость"
         view.backgroundColor = .systemBackground
 
-        guard let newsID, let article = HomeMockData.newsArticles.first(where: { $0.id == newsID }) else { return }
+        guard let article = HomeMockData.newsArticles.first(where: { $0.id == newsID }) else { return }
 
         let scrollView = UIScrollView()
         let stackView = UIStackView()
@@ -63,7 +75,7 @@ final class NewsDetailViewController: UIViewController {
         stackView.addArrangedSubview(subtitleLabel)
         stackView.addArrangedSubview(dateLabel)
 
-        if documentService?.isAvailableOffline(documentID: newsID) == true {
+        if documentService.isAvailableOffline(documentID: newsID) == true {
             let offlineLabel = UILabel()
             offlineLabel.font = .systemFont(ofSize: 13, weight: .medium)
             offlineLabel.textColor = HomeUIKitStyle.secondaryText
@@ -83,7 +95,7 @@ final class NewsDetailViewController: UIViewController {
             article.relatedIDs.forEach { relatedID in
                 let relatedTitleText = HomeMockData.newsArticles.first(where: { $0.id == relatedID })?.title ?? "Открыть новость"
                 let button = makeHomeLinkButton(title: relatedTitleText) { [weak self] in
-                    self?.coordinator.push(.newsDetail(id: relatedID))
+                    self?.navigator.openDocument(id: relatedID, in: .news)
                 }
                 stackView.addArrangedSubview(button)
             }
@@ -91,8 +103,8 @@ final class NewsDetailViewController: UIViewController {
 
         // Локальная модалка, инициированная из UIKit-экрана.
         stackView.addArrangedSubview(makeHomeDivider())
-        let videoButton = makeHomeLinkButton(title: "Смотреть видеообзор") { [weak self] in
-            self?.coordinator.showLocalSheet(.videoPlayer(url: "https://example.com/\(newsID).mp4"))
+        let videoButton = makeHomeLinkButton(title: "Смотреть видеообзор") { [weak self, newsID] in
+            self?.navigator.openVideo(url: "https://example.com/\(newsID).mp4")
         }
         stackView.addArrangedSubview(videoButton)
     }
