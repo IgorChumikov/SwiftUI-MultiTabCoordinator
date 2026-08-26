@@ -8,7 +8,7 @@
 import Foundation
 
 /// Модалка, принадлежащая сценарию внутри таба. См. `LocalCover`.
-enum LocalSheet: Identifiable {
+enum LocalSheet: Identifiable, AnalyticsNamed {
     case camera
     case videoPlayer(url: String)
     

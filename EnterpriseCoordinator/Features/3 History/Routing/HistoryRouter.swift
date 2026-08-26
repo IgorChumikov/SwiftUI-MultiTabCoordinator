@@ -14,7 +14,6 @@ struct HistoryRouter: Router {
     @ViewBuilder
     func rootView() -> some View {
         HistoryView(coordinator: coordinator)
-            .onAppear { dependencies.analytics.track("history.root") }
     }
 
     @ViewBuilder
@@ -22,10 +21,24 @@ struct HistoryRouter: Router {
         switch route {
         case .documentDetails(document: let document):
             DocumentHistoryDetailsView(coordinator: coordinator, document: document)
-                .onAppear { dependencies.analytics.track("history.documentDetails") }
         case .allDocumentsHistoryView(documentTitle: let documentTitle):
             AllDocumentsHistoryView(coordinator: coordinator, documentTitle: documentTitle)
-                .onAppear { dependencies.analytics.track("history.allDocuments") }
+        }
+    }
+
+    func makeEventHandler() -> (NavigationEvent<HistoryRoute>) -> Void {
+        let analytics = dependencies.analytics
+        return { event in
+            switch event {
+            case .pushed(let route):
+                analytics.track("history.\(route.analyticsName)")
+            case .presentedSheet(let sheet):
+                analytics.track("history.modal.\(sheet.analyticsName)")
+            case .presentedCover(let cover):
+                analytics.track("history.modal.\(cover.analyticsName)")
+            case .popped, .poppedToRoot:
+                break
+            }
         }
     }
 }

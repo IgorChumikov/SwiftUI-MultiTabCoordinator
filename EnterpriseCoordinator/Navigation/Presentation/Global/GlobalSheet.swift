@@ -8,7 +8,7 @@
 import Foundation
 
 /// Модалка уровня приложения. См. `GlobalCover`.
-enum GlobalSheet: Identifiable {
+enum GlobalSheet: Identifiable, AnalyticsNamed {
     case onboarding
     
     var id: String {

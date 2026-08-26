@@ -9,7 +9,7 @@ import Foundation
 
 /// Модалка, принадлежащая сценарию внутри таба: живёт вместе с этим табом
 /// и показывается через его `NavigationCoordinator`.
-enum LocalCover: Identifiable {
+enum LocalCover: Identifiable, AnalyticsNamed {
     case quickView(productId: String)
     
     var id: String {

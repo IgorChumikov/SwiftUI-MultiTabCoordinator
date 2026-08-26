@@ -14,7 +14,6 @@ struct FavoritesRouter: Router {
     @ViewBuilder
     func rootView() -> some View {
         FavoritesView(coordinator: coordinator)
-            .onAppear { dependencies.analytics.track("favorites.root") }
     }
 
     @ViewBuilder
@@ -22,16 +21,28 @@ struct FavoritesRouter: Router {
         switch route {
         case .bookmarks:
             FavoritesBookmarks()
-                .onAppear { dependencies.analytics.track("favorites.bookmarks") }
         case .folders:
             FavoritesFolders()
-                .onAppear { dependencies.analytics.track("favorites.folders") }
         case .documentsUnderControl:
             FavoritesDocumentsUnderControl()
-                .onAppear { dependencies.analytics.track("favorites.documentsUnderControl") }
         case .uploadedDocuments:
             FavoritesUploadedDocuments()
-                .onAppear { dependencies.analytics.track("favorites.uploadedDocuments") }
+        }
+    }
+
+    func makeEventHandler() -> (NavigationEvent<FavoritesRoute>) -> Void {
+        let analytics = dependencies.analytics
+        return { event in
+            switch event {
+            case .pushed(let route):
+                analytics.track("favorites.\(route.analyticsName)")
+            case .presentedSheet(let sheet):
+                analytics.track("favorites.modal.\(sheet.analyticsName)")
+            case .presentedCover(let cover):
+                analytics.track("favorites.modal.\(cover.analyticsName)")
+            case .popped, .poppedToRoot:
+                break
+            }
         }
     }
 }

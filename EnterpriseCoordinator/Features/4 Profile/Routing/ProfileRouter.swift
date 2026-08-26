@@ -14,7 +14,6 @@ struct ProfileRouter: Router {
     @ViewBuilder
     func rootView() -> some View {
         ProfileView(coordinator: coordinator, authService: dependencies.authService)
-            .onAppear { dependencies.analytics.track("profile.root") }
     }
 
     @ViewBuilder
@@ -23,32 +22,42 @@ struct ProfileRouter: Router {
         case .news:
             NewsListView(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.newsList") }
 
         case .newsDetails(let id):
             NewsDetailsView(newsId: id, documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.newsDetails") }
 
         case .codes:
             CodesListView(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.codesList") }
 
         case .codeDocument(let id):
             CodeDocumentView(codeId: id, documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.codeDocument") }
 
         case .settings:
             AppSettingsView()
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.settings") }
 
         case .aboutApp:
             AboutAppView()
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("profile.about") }
+        }
+    }
+
+    func makeEventHandler() -> (NavigationEvent<ProfileRoute>) -> Void {
+        let analytics = dependencies.analytics
+        return { event in
+            switch event {
+            case .pushed(let route):
+                analytics.track("profile.\(route.analyticsName)")
+            case .presentedSheet(let sheet):
+                analytics.track("profile.modal.\(sheet.analyticsName)")
+            case .presentedCover(let cover):
+                analytics.track("profile.modal.\(cover.analyticsName)")
+            case .popped, .poppedToRoot:
+                break
+            }
         }
     }
 }

@@ -14,7 +14,12 @@ final class TabBarCoordinator: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var selectedTab: AppTab = .home
+    @Published var selectedTab: AppTab = .home {
+        didSet {
+            guard oldValue != selectedTab else { return }
+            onEvent?(.selectedTab(selectedTab))
+        }
+    }
     
     // MARK: - Tab Coordinators
     
@@ -27,6 +32,12 @@ final class TabBarCoordinator: ObservableObject {
     
     @Published var globalSheet: GlobalSheet?
     @Published var globalCover: GlobalCover?
+
+    // MARK: - Events
+
+    /// См. `NavigationCoordinator.onEvent`: замыкание не должно захватывать
+    /// сам координатор.
+    var onEvent: ((TabBarEvent) -> Void)?
     
     // MARK: - Public Navigation
     
@@ -45,6 +56,7 @@ final class TabBarCoordinator: ObservableObject {
     
     func showGlobalSheet(_ sheet: GlobalSheet) {
         globalSheet = sheet
+        onEvent?(.presentedSheet(sheet))
     }
     
     func dismissGlobalSheet() {
@@ -55,6 +67,7 @@ final class TabBarCoordinator: ObservableObject {
     
     func showGlobalCover(_ cover: GlobalCover) {
         globalCover = cover
+        onEvent?(.presentedCover(cover))
     }
     
     func dismissGlobalCover() {

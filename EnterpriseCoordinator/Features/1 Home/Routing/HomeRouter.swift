@@ -14,7 +14,6 @@ struct HomeRouter: Router {
     @ViewBuilder
     func rootView() -> some View {
         HomeView(coordinator: coordinator)
-            .onAppear { dependencies.analytics.track("home.root") }
     }
 
     @ViewBuilder
@@ -23,43 +22,54 @@ struct HomeRouter: Router {
         case .newsList:
             NewsListUIKitAssembly(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.newsList") }
         case .newsDetail(let id):
             NewsDetailUIKitAssembly(coordinator: coordinator,
                                     newsID: id,
                                     documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.newsDetail") }
         case .codesList:
             CodesListUIKitAssembly(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.codesList") }
         case .codeDetail(let id):
             CodeDetailUIKitAssembly(coordinator: coordinator,
                                     documentID: id,
                                     documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.codeDetail") }
         case .referenceList:
             ReferenceListUIKitAssembly(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.referenceList") }
         case .referenceDetail(let id):
             ReferenceDetailUIKitAssembly(coordinator: coordinator,
                                          documentID: id,
                                          documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.referenceDetail") }
         case .reviewsList:
             ReviewsListUIKitAssembly(coordinator: coordinator)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.reviewsList") }
         case .reviewDetail(let id):
             ReviewDetailUIKitAssembly(coordinator: coordinator,
                                       documentID: id,
                                       documentService: dependencies.documentService)
                 .toolbar(.hidden, for: .tabBar)
-                .onAppear { dependencies.analytics.track("home.reviewDetail") }
+        }
+    }
+
+    func makeEventHandler() -> (NavigationEvent<HomeRoute>) -> Void {
+        let analytics = dependencies.analytics
+        return { event in
+            switch event {
+            case .pushed(let route):
+                analytics.track("home.\(route.analyticsName)")
+            case .presentedSheet(let sheet):
+                analytics.track("home.modal.\(sheet.analyticsName)")
+            case .presentedCover(let cover):
+                analytics.track("home.modal.\(cover.analyticsName)")
+            case .popped, .poppedToRoot:
+                // Возврат назад отдельным событием не считаем: экран уже был
+                // засчитан при переходе вперёд. Если продукту понадобится
+                // «просмотр экрана» с учётом возвратов — трекать здесь.
+                break
+            }
         }
     }
 }

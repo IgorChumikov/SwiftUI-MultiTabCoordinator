@@ -9,7 +9,7 @@ import Foundation
 
 /// Модалка уровня приложения: перекрывает всё, переживает переключение таба,
 /// не принадлежит ни одной фиче. Показывается через `TabBarCoordinator`.
-enum GlobalCover: Identifiable {
+enum GlobalCover: Identifiable, AnalyticsNamed {
     case login
     
     var id: String {

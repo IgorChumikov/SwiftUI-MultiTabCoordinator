@@ -8,7 +8,8 @@
 import SwiftUI
 import Combine
 
-/// Composition root **одной сцены**: здесь собирается граф навигации.
+/// Composition root **одной сцены**: здесь собирается граф навигации
+/// и связываются его участники.
 ///
 /// Создаётся через `@StateObject` в `AppCoordinatorView`, то есть по одному
 /// экземпляру на окно. На iPad это принципиально: многооконность включена
@@ -49,5 +50,39 @@ final class AppComposition: ObservableObject {
         self.history = HistoryRouter(dependencies: container, coordinator: coordinator.history)
         self.profile = ProfileRouter(dependencies: container, coordinator: coordinator.profile)
         self.globalModal = GlobalModalRouter(dependencies: container)
+
+        wireAnalytics(analytics: container.analytics)
+    }
+}
+
+// MARK: - Wiring
+
+private extension AppComposition {
+
+    /// Связывает навигационные события с аналитикой. Именование событий фичи
+    /// живёт в её роутере, здесь — только соединение участников.
+    ///
+    /// Обработчики захватывают сервис, но не координаторы, иначе получился бы
+    /// цикл ссылок и окно на iPad не освобождалось бы при закрытии.
+    func wireAnalytics(analytics: AnalyticsServicing) {
+        coordinator.home.onEvent = home.makeEventHandler()
+        coordinator.favorites.onEvent = favorites.makeEventHandler()
+        coordinator.history.onEvent = history.makeEventHandler()
+        coordinator.profile.onEvent = profile.makeEventHandler()
+
+        coordinator.onEvent = { event in
+            switch event {
+            case .selectedTab(let tab):
+                analytics.track("tab.\(tab.rawValue)")
+            case .presentedSheet(let sheet):
+                analytics.track("modal.global.\(sheet.analyticsName)")
+            case .presentedCover(let cover):
+                analytics.track("modal.global.\(cover.analyticsName)")
+            }
+        }
+
+        // Стартовый таб выставлен по умолчанию и `didSet` не вызывает,
+        // поэтому первое открытие фиксируем явно.
+        analytics.track("tab.\(coordinator.selectedTab.rawValue)")
     }
 }
