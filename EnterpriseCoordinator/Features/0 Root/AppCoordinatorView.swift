@@ -9,12 +9,8 @@ import SwiftUI
 
 struct AppCoordinatorView: View {
 
-    /// Граф собирается один раз: `StateObject` не пересоздаёт значение при рендерах.
-    @StateObject private var composition: AppComposition
-
-    init(container: AppContainer) {
-        _composition = StateObject(wrappedValue: AppComposition(container: container))
-    }
+    /// Граф собран в точке входа приложения, вью его только использует.
+    let composition: AppComposition
 
     var body: some View {
         AppTabsView(composition: composition, coordinator: composition.coordinator)
@@ -24,8 +20,7 @@ struct AppCoordinatorView: View {
 // MARK: - Tabs
 
 /// Отдельная вью нужна, чтобы подписаться на `TabBarCoordinator` через
-/// `@ObservedObject` и получить биндинги (`$coordinator.selectedTab` и т.д.)
-/// уже после того, как граф собран.
+/// `@ObservedObject` и получить биндинги (`$coordinator.selectedTab` и т.д.).
 private struct AppTabsView: View {
     let composition: AppComposition
     @ObservedObject var coordinator: TabBarCoordinator
@@ -71,5 +66,5 @@ private struct AppTabsView: View {
 }
 
 #Preview {
-    AppCoordinatorView(container: .preview)
+    AppCoordinatorView(composition: AppComposition(container: .preview))
 }

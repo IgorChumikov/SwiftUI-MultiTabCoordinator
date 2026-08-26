@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import Combine
 
 /// Composition root приложения: единственное место, где собирается граф объектов.
 ///
-/// Создаётся один раз на запуск (через `@StateObject` в `AppCoordinatorView`),
-/// поэтому координаторы и роутеры живут всё время работы приложения,
-/// а не пересобираются на каждый рендер.
-final class AppComposition: ObservableObject {
+/// Создаётся один раз в `EnterpriseCoordinatorApp` — структура `App` живёт
+/// столько же, сколько процесс, поэтому координаторы и роутеры не пересобираются
+/// на рендерах. Наблюдаемым быть не должен: он ничего не публикует,
+/// подписываться нужно на `TabBarCoordinator`.
+final class AppComposition {
 
     // MARK: - Coordinators
 

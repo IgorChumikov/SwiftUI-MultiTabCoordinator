@@ -9,7 +9,9 @@ import SwiftUI
 
 @main
 struct EnterpriseCoordinatorApp: App {
-    private let container = AppContainer.live
+
+    /// Точка сборки графа: `App` создаётся один раз на процесс.
+    private let composition = AppComposition(container: .live)
 
     init() {
         let appearance = UITabBarAppearance()
@@ -24,7 +26,7 @@ struct EnterpriseCoordinatorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppCoordinatorView(container: container)
+            AppCoordinatorView(composition: composition)
         }
     }
 }
