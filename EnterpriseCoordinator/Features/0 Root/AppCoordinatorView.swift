@@ -8,38 +8,49 @@
 import SwiftUI
 
 struct AppCoordinatorView: View {
-    @StateObject private var coordinator = TabBarCoordinator()
-    let container: AppContainer
 
-    private var globalModalRouter: GlobalModalRouter {
-        GlobalModalRouter(dependencies: container)
+    /// Граф собирается один раз: `StateObject` не пересоздаёт значение при рендерах.
+    @StateObject private var composition: AppComposition
+
+    init(container: AppContainer) {
+        _composition = StateObject(wrappedValue: AppComposition(container: container))
     }
-    
+
+    var body: some View {
+        AppTabsView(composition: composition, coordinator: composition.coordinator)
+    }
+}
+
+// MARK: - Tabs
+
+/// Отдельная вью нужна, чтобы подписаться на `TabBarCoordinator` через
+/// `@ObservedObject` и получить биндинги (`$coordinator.selectedTab` и т.д.)
+/// уже после того, как граф собран.
+private struct AppTabsView: View {
+    let composition: AppComposition
+    @ObservedObject var coordinator: TabBarCoordinator
+
     var body: some View {
         TabView(selection: $coordinator.selectedTab) {
-            HomeTab(coordinator: coordinator.home,
-                    router: HomeRouter(dependencies: container, coordinator: coordinator.home))
+            HomeTab(coordinator: coordinator.home, router: composition.home)
                 .tabItem {
                     Label(AppTab.home.title, systemImage: AppTab.home.icon)
                 }
                 .tag(AppTab.home)
-            
-            FavoritesTab(coordinator: coordinator.favorites,
-                         router: FavoritesRouter(dependencies: container, coordinator: coordinator.favorites))
+
+            FavoritesTab(coordinator: coordinator.favorites, router: composition.favorites)
                 .tabItem {
                     Label(AppTab.favorites.title, systemImage: AppTab.favorites.icon)
                 }
                 .tag(AppTab.favorites)
-            
-            HistoryTab(coordinator: coordinator.history,
-                       router: HistoryRouter(dependencies: container, coordinator: coordinator.history))
+
+            HistoryTab(coordinator: coordinator.history, router: composition.history)
                 .tabItem {
                     Label(AppTab.history.title, systemImage: AppTab.history.icon)
                 }
                 .tag(AppTab.history)
 
-            ProfileTab(coordinator: coordinator.profile,
-                       router: ProfileRouter(dependencies: container, coordinator: coordinator.profile))
+            ProfileTab(coordinator: coordinator.profile, router: composition.profile)
                 .tabItem {
                     Label(AppTab.profile.title, systemImage: AppTab.profile.icon)
                 }
@@ -48,10 +59,10 @@ struct AppCoordinatorView: View {
         .tint(Color(red: 128 / 255, green: 108 / 255, blue: 187 / 255))
         .environmentObject(coordinator)
         .sheet(item: $coordinator.globalSheet) { sheet in
-            globalModalRouter.view(for: sheet)
+            composition.globalModal.view(for: sheet)
         }
         .fullScreenCover(item: $coordinator.globalCover) { cover in
-            globalModalRouter.view(for: cover)
+            composition.globalModal.view(for: cover)
         }
         .onOpenURL { url in
             coordinator.handle(url)
