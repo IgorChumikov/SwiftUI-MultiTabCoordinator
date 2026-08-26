@@ -9,8 +9,13 @@ import SwiftUI
 
 struct AppCoordinatorView: View {
 
-    /// Граф собран в точке входа приложения, вью его только использует.
-    let composition: AppComposition
+    /// Граф навигации собирается один раз на сцену: `StateObject` не пересоздаёт
+    /// значение при рендерах, а `WindowGroup` даёт каждому окну своё хранилище.
+    @StateObject private var composition: AppComposition
+
+    init(container: AppContainer) {
+        _composition = StateObject(wrappedValue: AppComposition(container: container))
+    }
 
     var body: some View {
         AppTabsView(composition: composition, coordinator: composition.coordinator)
@@ -20,7 +25,8 @@ struct AppCoordinatorView: View {
 // MARK: - Tabs
 
 /// Отдельная вью нужна, чтобы подписаться на `TabBarCoordinator` через
-/// `@ObservedObject` и получить биндинги (`$coordinator.selectedTab` и т.д.).
+/// `@ObservedObject` и получить биндинги (`$coordinator.selectedTab` и т.д.)
+/// уже после того, как граф собран.
 private struct AppTabsView: View {
     let composition: AppComposition
     @ObservedObject var coordinator: TabBarCoordinator
@@ -66,5 +72,5 @@ private struct AppTabsView: View {
 }
 
 #Preview {
-    AppCoordinatorView(composition: AppComposition(container: .preview))
+    AppCoordinatorView(container: .preview)
 }

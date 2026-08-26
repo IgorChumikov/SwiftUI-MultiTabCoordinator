@@ -10,8 +10,10 @@ import SwiftUI
 @main
 struct EnterpriseCoordinatorApp: App {
 
-    /// Точка сборки графа: `App` создаётся один раз на процесс.
-    private let composition = AppComposition(container: .live)
+    /// Сервисы общие на процесс: второе окно не должно поднимать
+    /// вторую сессию или второй сетевой клиент.
+    /// Граф навигации, наоборот, создаётся в `AppCoordinatorView` — свой на окно.
+    private let container = AppContainer.live
 
     init() {
         let appearance = UITabBarAppearance()
@@ -26,7 +28,7 @@ struct EnterpriseCoordinatorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppCoordinatorView(composition: composition)
+            AppCoordinatorView(container: container)
         }
     }
 }
