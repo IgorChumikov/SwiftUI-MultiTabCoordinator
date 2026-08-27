@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ProfileDependencies {
+    var newsService: NewsServicing { get }
     var documentService: DocumentServicing { get }
     var analytics: AnalyticsServicing { get }
     var authService: AuthServicing { get }

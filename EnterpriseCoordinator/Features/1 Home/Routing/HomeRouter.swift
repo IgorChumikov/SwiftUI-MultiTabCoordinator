@@ -13,7 +13,11 @@ struct HomeRouter: Router {
 
     @ViewBuilder
     func rootView() -> some View {
-        HomeView(navigator: coordinator)
+        HomeView(
+            viewModel: HomeViewModel(newsService: dependencies.newsService,
+                                     documentService: dependencies.documentService,
+                                     navigator: coordinator)
+        )
     }
 
     @ViewBuilder

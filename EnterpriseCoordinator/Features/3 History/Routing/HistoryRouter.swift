@@ -13,7 +13,10 @@ struct HistoryRouter: Router {
 
     @ViewBuilder
     func rootView() -> some View {
-        HistoryView(coordinator: coordinator)
+        HistoryView(
+            viewModel: HistoryViewModel(historyService: dependencies.historyService,
+                                        navigator: coordinator)
+        )
     }
 
     @ViewBuilder

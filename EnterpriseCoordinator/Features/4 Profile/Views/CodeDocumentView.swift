@@ -8,49 +8,65 @@
 import SwiftUI
 
 struct CodeDocumentView: View {
-    let codeId: String
-    let documentService: DocumentServicing
+    @StateObject private var viewModel: CodeDocumentViewModel
 
-    private var code: CodeItem? {
-        ProfileMockData.codes.first { $0.id == codeId }
+    init(viewModel: @autoclosure @escaping () -> CodeDocumentViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
     }
 
     var body: some View {
-        Group {
-            if let code {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("\(code.number) • \(code.title)")
-                            .font(.title3)
-                            .fontWeight(.semibold)
+        content
+            .navigationTitle("Документ")
+            .navigationBarTitleDisplayMode(.inline)
+            .task { await viewModel.onAppear() }
+    }
 
-                        Text("Обновлено: \(code.updatedAt.formatted(date: .long, time: .omitted))")
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        case .notFound:
+            PlaceholderView(systemImage: "doc.text", title: "Документ не найден")
+
+        case .loaded(let code, let isAvailableOffline):
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("\(code.number) • \(code.title)")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+
+                    Text("Обновлено: \(code.updatedAt.formatted(date: .long, time: .omitted))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if isAvailableOffline {
+                        Label("Доступно офлайн", systemImage: "arrow.down.circle")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-
-                        if documentService.isAvailableOffline(documentID: codeId) {
-                            Label("Доступно офлайн", systemImage: "arrow.down.circle")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        Divider()
-
-                        Text(code.document)
-                            .font(.body)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+
+                    Divider()
+
+                    Text(code.document)
+                        .font(.body)
                 }
-            } else {
-                ContentUnavailableView("Документ не найден", systemImage: "doc.text")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
         }
-        .navigationTitle("Документ")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    CodeDocumentView(codeId: "code-001", documentService: StubDocumentService())
+    NavigationStack {
+        CodeDocumentView(
+            viewModel: CodeDocumentViewModel(
+                codeID: "code-001",
+                documentService: StubDocumentService()
+            )
+        )
+    }
 }

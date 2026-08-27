@@ -8,5 +8,6 @@
 import Foundation
 
 protocol HistoryDependencies {
+    var historyService: HistoryServicing { get }
     var analytics: AnalyticsServicing { get }
 }

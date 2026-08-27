@@ -20,20 +20,34 @@ struct ProfileRouter: Router {
     func view(for route: ProfileRoute) -> some View {
         switch route {
         case .news:
-            NewsListView(coordinator: coordinator)
-                .toolbar(.hidden, for: .tabBar)
+            NewsListView(
+                viewModel: NewsListViewModel(newsService: dependencies.newsService,
+                                             documentService: dependencies.documentService,
+                                             navigator: coordinator)
+            )
+            .toolbar(.hidden, for: .tabBar)
 
         case .newsDetails(let id):
-            NewsDetailsView(newsId: id, documentService: dependencies.documentService)
-                .toolbar(.hidden, for: .tabBar)
+            NewsDetailsView(
+                viewModel: NewsDetailsViewModel(newsID: id,
+                                                newsService: dependencies.newsService,
+                                                documentService: dependencies.documentService)
+            )
+            .toolbar(.hidden, for: .tabBar)
 
         case .codes:
-            CodesListView(coordinator: coordinator)
-                .toolbar(.hidden, for: .tabBar)
+            CodesListView(
+                viewModel: CodesListViewModel(documentService: dependencies.documentService,
+                                              navigator: coordinator)
+            )
+            .toolbar(.hidden, for: .tabBar)
 
         case .codeDocument(let id):
-            CodeDocumentView(codeId: id, documentService: dependencies.documentService)
-                .toolbar(.hidden, for: .tabBar)
+            CodeDocumentView(
+                viewModel: CodeDocumentViewModel(codeID: id,
+                                                 documentService: dependencies.documentService)
+            )
+            .toolbar(.hidden, for: .tabBar)
 
         case .settings:
             AppSettingsView()

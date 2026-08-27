@@ -8,47 +8,64 @@
 import SwiftUI
 
 struct NewsDetailsView: View {
-    let newsId: String
-    let documentService: DocumentServicing
+    @StateObject private var viewModel: NewsDetailsViewModel
 
-    private var news: NewsItem? {
-        ProfileMockData.news.first { $0.id == newsId }
+    init(viewModel: @autoclosure @escaping () -> NewsDetailsViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
     }
 
     var body: some View {
-        Group {
-            if let news {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text(news.title)
-                            .font(.title2)
-                            .fontWeight(.semibold)
+        content
+            .navigationTitle("Новость")
+            .navigationBarTitleDisplayMode(.inline)
+            .task { await viewModel.onAppear() }
+    }
 
-                        Text(news.date, style: .date)
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        case .notFound:
+            PlaceholderView(systemImage: "newspaper", title: "Новость не найдена")
+
+        case .loaded(let news, let isAvailableOffline):
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text(news.title)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    Text(news.date, style: .date)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if isAvailableOffline {
+                        Label("Доступно офлайн", systemImage: "arrow.down.circle")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-
-                        if documentService.isAvailableOffline(documentID: newsId) {
-                            Label("Доступно офлайн", systemImage: "arrow.down.circle")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        Text(news.details)
-                            .font(.body)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+
+                    Text(news.details)
+                        .font(.body)
                 }
-            } else {
-                ContentUnavailableView("Новость не найдена", systemImage: "newspaper")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
         }
-        .navigationTitle("Новость")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    NewsDetailsView(newsId: "news-001", documentService: StubDocumentService())
+    NavigationStack {
+        NewsDetailsView(
+            viewModel: NewsDetailsViewModel(
+                newsID: "news-001",
+                newsService: StubNewsService(),
+                documentService: StubDocumentService()
+            )
+        )
+    }
 }

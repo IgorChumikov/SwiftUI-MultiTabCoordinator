@@ -15,20 +15,26 @@ struct AppContainer: HomeDependencies,
                      HistoryDependencies,
                      ProfileDependencies,
                      ModalDependencies {
+    let newsService: NewsServicing
     let documentService: DocumentServicing
+    let historyService: HistoryServicing
     let analytics: AnalyticsServicing
     let authService: AuthServicing
 }
 
 extension AppContainer {
     static let live = AppContainer(
+        newsService: StubNewsService(),
         documentService: StubDocumentService(),
+        historyService: StubHistoryService(),
         analytics: StubAnalyticsService(),
         authService: StubAuthService()
     )
 
     static let preview = AppContainer(
+        newsService: StubNewsService(),
         documentService: StubDocumentService(),
+        historyService: StubHistoryService(),
         analytics: StubAnalyticsService(),
         authService: StubAuthService()
     )
