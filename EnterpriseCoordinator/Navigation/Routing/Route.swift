@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol Route: Hashable, Identifiable {
+protocol Route: Hashable, Identifiable, AnalyticsNamed {
     var id: String { get }
 }

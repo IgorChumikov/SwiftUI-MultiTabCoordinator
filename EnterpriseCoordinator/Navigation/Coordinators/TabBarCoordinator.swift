@@ -14,7 +14,12 @@ final class TabBarCoordinator: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var selectedTab: AppTab = .home
+    @Published var selectedTab: AppTab = .home {
+        didSet {
+            guard oldValue != selectedTab else { return }
+            onEvent?(.selectedTab(selectedTab, isAtRoot: isAtRoot(selectedTab)))
+        }
+    }
     
     // MARK: - Tab Coordinators
     
@@ -27,7 +32,26 @@ final class TabBarCoordinator: ObservableObject {
     
     @Published var globalSheet: GlobalSheet?
     @Published var globalCover: GlobalCover?
+
+    // MARK: - Events
+
+    /// См. `NavigationCoordinator.onEvent`: замыкание не должно захватывать
+    /// сам координатор.
+    var onEvent: ((TabBarEvent) -> Void)?
     
+    // MARK: - Tab Selection
+
+    /// Точка входа для таб-бара. Отдельный метод нужен, чтобы отличить
+    /// повторный тап по активному табу от переключения: присваивание того же
+    /// значения `selectedTab` не вызывает `didSet`, и событие потерялось бы.
+    func select(_ tab: AppTab) {
+        guard tab != selectedTab else {
+            onEvent?(.reselectedTab(tab, isAtRoot: isAtRoot(tab)))
+            return
+        }
+        selectedTab = tab
+    }
+
     // MARK: - Public Navigation
     
     func showCart() {
@@ -45,6 +69,7 @@ final class TabBarCoordinator: ObservableObject {
     
     func showGlobalSheet(_ sheet: GlobalSheet) {
         globalSheet = sheet
+        onEvent?(.presentedSheet(sheet))
     }
     
     func dismissGlobalSheet() {
@@ -55,10 +80,26 @@ final class TabBarCoordinator: ObservableObject {
     
     func showGlobalCover(_ cover: GlobalCover) {
         globalCover = cover
+        onEvent?(.presentedCover(cover))
     }
     
     func dismissGlobalCover() {
         globalCover = nil
+    }
+}
+
+// MARK: - Stack State
+
+private extension TabBarCoordinator {
+
+    /// Пустой ли стек у таба, то есть окажется ли пользователь на его корне.
+    func isAtRoot(_ tab: AppTab) -> Bool {
+        switch tab {
+        case .home: return home.path.isEmpty
+        case .favorites: return favorites.path.isEmpty
+        case .history: return history.path.isEmpty
+        case .profile: return profile.path.isEmpty
+        }
     }
 }
 

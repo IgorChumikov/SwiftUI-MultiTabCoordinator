@@ -8,20 +8,28 @@
 import SwiftUI
 
 struct ProfileTab: View {
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
+    let router: ProfileRouter
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            ProfileView(coordinator: coordinator)
+            router.rootView()
                 .navigationDestination(for: ProfileRoute.self) { route in
-                    coordinator.build(route)
+                    router.view(for: route)
                 }
                 .sheet(item: $coordinator.localSheet) { sheet in
-                    app.buildLocalSheet(sheet)
+                    LocalModalRouter.view(for: sheet)
                 }
                 .fullScreenCover(item: $coordinator.localCover) { cover in
-                    app.buildLocalCover(cover)
-                }        }
+                    LocalModalRouter.view(for: cover)
+                }
+        }
     }
+}
+
+#Preview {
+    let coordinator = NavigationCoordinator<ProfileRoute>()
+    ProfileTab(coordinator: coordinator,
+               router: ProfileRouter(dependencies: AppContainer.preview, coordinator: coordinator))
+        .environmentObject(TabBarCoordinator())
 }

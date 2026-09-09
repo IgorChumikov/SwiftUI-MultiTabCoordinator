@@ -9,6 +9,6 @@ import UIKit
 
 final class ReviewDetailViewController: HomeDocumentDetailViewController {
     override func openRelatedDocument(id: String) {
-        coordinator.push(.reviewDetail(id: id))
+        navigator.openDocument(id: id, in: .reviews)
     }
 }

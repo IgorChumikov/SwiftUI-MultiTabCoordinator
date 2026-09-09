@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct NewsDetailUIKitAssembly: View {
-    let coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
     let newsID: String
+    let documentService: DocumentServicing
 
     var body: some View {
         UIKitViewControllerContainer(
             makeViewController: {
-                NewsDetailViewController()
-            },
-            updateViewController: { viewController in
-                viewController.coordinator = coordinator
-                viewController.newsID = newsID
+                NewsDetailViewController(navigator: navigator,
+                                         documentService: documentService,
+                                         newsID: newsID)
             }
         )
     }

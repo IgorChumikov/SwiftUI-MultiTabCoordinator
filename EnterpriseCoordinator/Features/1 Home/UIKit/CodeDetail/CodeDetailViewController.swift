@@ -9,6 +9,6 @@ import UIKit
 
 final class CodeDetailViewController: HomeDocumentDetailViewController {
     override func openRelatedDocument(id: String) {
-        coordinator.push(.codeDetail(id: id))
+        navigator.openDocument(id: id, in: .codes)
     }
 }

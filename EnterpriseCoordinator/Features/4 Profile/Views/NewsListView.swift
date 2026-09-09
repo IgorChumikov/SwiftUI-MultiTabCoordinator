@@ -8,34 +8,70 @@
 import SwiftUI
 
 struct NewsListView: View {
-    @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
+
+    /// Вью-модель живёт столько же, сколько экран. Параметр — автозамыкание,
+    /// потому что `StateObject(wrappedValue:)` вычисляет его ровно один раз:
+    /// иначе роутер пересоздавал бы её на каждый рендер.
+    @StateObject private var viewModel: NewsListViewModel
+
+    init(viewModel: @autoclosure @escaping () -> NewsListViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
 
     var body: some View {
-        List(ProfileMockData.news) { item in
-            Button {
-                coordinator.push(.newsDetails(id: item.id))
-            } label: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(item.title)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+        content
+            .navigationTitle("Новости")
+            .task { await viewModel.onAppear() }
+    }
 
-                    Text(item.summary)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                    Text(item.date, style: .date)
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+        case .empty:
+            PlaceholderView(systemImage: "newspaper", title: "Новостей пока нет")
+
+        case .loaded(let items):
+            List(items) { item in
+                Button {
+                    viewModel.didSelect(item)
+                } label: {
+                    row(for: item)
                 }
-                .padding(.vertical, 4)
             }
         }
-        .navigationTitle("Новости")
+    }
+
+    private func row(for item: NewsItem) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(item.title)
+                .font(.headline)
+                .foregroundStyle(.primary)
+
+            Text(item.summary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+
+            Text(item.date, style: .date)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(.vertical, 4)
     }
 }
 
 #Preview {
-    NewsListView(coordinator: NavigationCoordinator<ProfileRoute>())
+    NavigationStack {
+        NewsListView(
+            viewModel: NewsListViewModel(
+                newsService: StubNewsService(),
+                documentService: StubDocumentService(),
+                navigator: NavigationCoordinator<ProfileRoute>()
+            )
+        )
+    }
 }

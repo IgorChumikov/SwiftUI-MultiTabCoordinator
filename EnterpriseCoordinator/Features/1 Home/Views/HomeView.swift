@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var coordinator: NavigationCoordinator<HomeRoute>
+    @StateObject private var viewModel: HomeViewModel
+
+    init(viewModel: @autoclosure @escaping () -> HomeViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
 
     private let backgroundColor = Color(red: 240 / 255, green: 240 / 255, blue: 242 / 255)
     private let headerColor = Color(red: 238 / 255, green: 235 / 255, blue: 244 / 255)
@@ -24,9 +28,9 @@ struct HomeView: View {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 16) {
                         newsSection
-                        documentsSection(kind: .codes, items: HomeMockData.codesPreview)
-                        documentsSection(kind: .reference, items: HomeMockData.referencePreview)
-                        documentsSection(kind: .reviews, items: HomeMockData.reviewsPreview)
+                        documentsSection(kind: .codes, items: viewModel.preview(for: .codes))
+                        documentsSection(kind: .reference, items: viewModel.preview(for: .reference))
+                        documentsSection(kind: .reviews, items: viewModel.preview(for: .reviews))
                     }
                     .padding(.top, 16)
                     .padding(.bottom, 28)
@@ -35,6 +39,7 @@ struct HomeView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .tint(accentColor)
+        .task { await viewModel.onAppear() }
     }
 
     private var header: some View {
@@ -63,6 +68,16 @@ struct HomeView: View {
                 }
 
                 Spacer(minLength: 8)
+
+                // Локальная модалка: сканирование принадлежит сценарию этого таба.
+                Button {
+                    viewModel.openScanner()
+                } label: {
+                    Image(systemName: "camera.viewfinder")
+                        .font(.system(size: 25, weight: .medium))
+                        .foregroundStyle(accentColor.opacity(0.75))
+                }
+                .buttonStyle(.plain)
 
                 Button(action: {}) {
                     Image(systemName: "line.3.horizontal")
@@ -114,9 +129,9 @@ struct HomeView: View {
         VStack(spacing: 0) {
             sectionHeader(kind: .news)
 
-            ForEach(Array(HomeMockData.newsPreview.enumerated()), id: \.element.id) { index, item in
+            ForEach(Array(viewModel.newsPreview.enumerated()), id: \.element.id) { index, item in
                 Button {
-                    coordinator.push(.newsList)
+                    viewModel.openSection(.news)
                 } label: {
                     VStack(alignment: .leading, spacing: 12) {
                         if let eyebrow = item.eyebrow {
@@ -149,7 +164,7 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
 
-                if index < HomeMockData.newsPreview.count - 1 {
+                if index < viewModel.newsPreview.count - 1 {
                     divider
                         .padding(.horizontal, 34)
                 }
@@ -164,7 +179,7 @@ struct HomeView: View {
 
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 Button {
-                    openSection(kind)
+                    viewModel.openSection(kind)
                 } label: {
                     Text(item.title)
                         .font(.system(size: 16, weight: .regular))
@@ -175,6 +190,14 @@ struct HomeView: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .contextMenu {
+                    // Локальная модалка: быстрый просмотр живёт вместе с табом.
+                    Button {
+                        viewModel.openQuickView(documentID: item.id)
+                    } label: {
+                        Label("Быстрый просмотр", systemImage: "eye")
+                    }
+                }
 
                 if index < items.count - 1 {
                     divider
@@ -188,7 +211,7 @@ struct HomeView: View {
     private func sectionHeader(kind: HomeSectionKind) -> some View {
         HStack(spacing: 14) {
             Button {
-                openSection(kind)
+                viewModel.openSection(kind)
             } label: {
                 HStack(spacing: 14) {
                     Image(systemName: kind.iconName)
@@ -205,7 +228,7 @@ struct HomeView: View {
             Spacer()
 
             Button(kind.actionTitle) {
-                openSection(kind)
+                viewModel.openSection(kind)
             }
             .font(.system(size: 17, weight: .medium))
             .foregroundStyle(Color(red: 46 / 255, green: 42 / 255, blue: 207 / 255))
@@ -219,19 +242,6 @@ struct HomeView: View {
         Rectangle()
             .fill(Color.black.opacity(0.11))
             .frame(height: 1)
-    }
-
-    private func openSection(_ kind: HomeSectionKind) {
-        switch kind {
-        case .news:
-            coordinator.push(.newsList)
-        case .codes:
-            coordinator.push(.codesList)
-        case .reference:
-            coordinator.push(.referenceList)
-        case .reviews:
-            coordinator.push(.reviewsList)
-        }
     }
 }
 
@@ -251,6 +261,10 @@ private extension View {
 
 #Preview {
     NavigationStack {
-        HomeView(coordinator: NavigationCoordinator<HomeRoute>())
+        HomeView(
+            viewModel: HomeViewModel(newsService: StubNewsService(),
+                                     documentService: StubDocumentService(),
+                                     navigator: NavigationCoordinator<HomeRoute>())
+        )
     }
 }

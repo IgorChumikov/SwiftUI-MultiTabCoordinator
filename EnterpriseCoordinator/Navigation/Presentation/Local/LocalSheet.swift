@@ -5,32 +5,17 @@
 //  Created by Игорь Чумиков on 02.12.2025.
 //
 
-import SwiftUI
+import Foundation
 
-enum LocalSheet: Identifiable {
-    case onboarding
+/// Модалка, принадлежащая сценарию внутри таба. См. `LocalCover`.
+enum LocalSheet: Identifiable, AnalyticsNamed {
     case camera
     case videoPlayer(url: String)
     
     var id: String {
         switch self {
-        case .onboarding: return "onboarding"
         case .camera: return "camera"
         case .videoPlayer: return "video"
-        }
-    }
-}
-
-extension TabBarCoordinator {
-    @ViewBuilder
-    func buildLocalSheet(_ cover: LocalSheet) -> some View {
-        switch cover {
-        case .onboarding:
-            OnboardingView()
-        case .camera:
-            CameraView()
-        case .videoPlayer(let url):
-            VideoPlayerView(url: url)
         }
     }
 }

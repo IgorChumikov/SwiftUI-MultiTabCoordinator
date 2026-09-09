@@ -8,25 +8,27 @@
 import SwiftUI
 
 struct FavoritesTab: View {
-    @EnvironmentObject var app: TabBarCoordinator
     @ObservedObject var coordinator: NavigationCoordinator<FavoritesRoute>
+    let router: FavoritesRouter
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            FavoritesView(coordinator: coordinator)
+            router.rootView()
                 .navigationDestination(for: FavoritesRoute.self) { route in
-                    coordinator.build(route)
+                    router.view(for: route)
                 }
                 .sheet(item: $coordinator.localSheet) { sheet in
-                    app.buildLocalSheet(sheet)
+                    LocalModalRouter.view(for: sheet)
                 }
                 .fullScreenCover(item: $coordinator.localCover) { cover in
-                    app.buildLocalCover(cover)
+                    LocalModalRouter.view(for: cover)
                 }
         }
     }
 }
 
 #Preview {
-    FavoritesTab(coordinator: NavigationCoordinator<FavoritesRoute>())
+    let coordinator = NavigationCoordinator<FavoritesRoute>()
+    FavoritesTab(coordinator: coordinator,
+                 router: FavoritesRouter(dependencies: AppContainer.preview, coordinator: coordinator))
 }

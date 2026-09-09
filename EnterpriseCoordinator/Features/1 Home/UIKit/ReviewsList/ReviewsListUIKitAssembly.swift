@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct ReviewsListUIKitAssembly: View {
-    let coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
 
     var body: some View {
         UIKitViewControllerContainer(
             makeViewController: {
-                ReviewsListViewController()
-            },
-            updateViewController: { viewController in
-                viewController.coordinator = coordinator
-                viewController.items = HomeMockData.reviews
+                ReviewsListViewController(navigator: navigator, items: HomeMockData.reviews)
             }
         )
     }

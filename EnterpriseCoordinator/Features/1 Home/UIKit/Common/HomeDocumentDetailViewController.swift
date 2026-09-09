@@ -8,16 +8,35 @@
 import UIKit
 
 class HomeDocumentDetailViewController: UIViewController {
-    var coordinator: NavigationCoordinator<HomeRoute>!
-    var documentID: String!
-    var documents: [HomeDocumentItem] = []
+    /// Доступен наследникам: они решают, документ какого раздела открывать.
+    let navigator: HomeNavigating
+
+    private let documentService: DocumentServicing
+    private let documentID: String
+    private let documents: [HomeDocumentItem]
+
+    init(navigator: HomeNavigating,
+         documentService: DocumentServicing,
+         documentID: String,
+         documents: [HomeDocumentItem]) {
+        self.navigator = navigator
+        self.documentService = documentService
+        self.documentID = documentID
+        self.documents = documents
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Документ"
         view.backgroundColor = .systemBackground
 
-        guard let documentID, let document = documents.first(where: { $0.id == documentID }) else { return }
+        guard let document = documents.first(where: { $0.id == documentID }) else { return }
 
         let scrollView = UIScrollView()
         let stackView = UIStackView()
@@ -50,6 +69,15 @@ class HomeDocumentDetailViewController: UIViewController {
         bodyLabel.text = document.content
 
         stackView.addArrangedSubview(titleLabel)
+
+        if documentService.isAvailableOffline(documentID: documentID) == true {
+            let offlineLabel = UILabel()
+            offlineLabel.font = .systemFont(ofSize: 13, weight: .medium)
+            offlineLabel.textColor = HomeUIKitStyle.secondaryText
+            offlineLabel.text = "Доступно офлайн"
+            stackView.addArrangedSubview(offlineLabel)
+        }
+
         stackView.addArrangedSubview(makeHomeDivider())
         stackView.addArrangedSubview(bodyLabel)
 

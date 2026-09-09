@@ -8,30 +8,57 @@
 import SwiftUI
 
 struct CodesListView: View {
-    @ObservedObject var coordinator: NavigationCoordinator<ProfileRoute>
+    @StateObject private var viewModel: CodesListViewModel
+
+    init(viewModel: @autoclosure @escaping () -> CodesListViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
 
     var body: some View {
-        List(ProfileMockData.codes) { item in
-            Button {
-                coordinator.push(.codeDocument(id: item.id))
-            } label: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("\(item.number) • \(item.title)")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                        .lineLimit(2)
+        content
+            .navigationTitle("Кодексы")
+            .task { await viewModel.onAppear() }
+    }
 
-                    Text("Обновлено: \(item.updatedAt.formatted(date: .abbreviated, time: .omitted))")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        case .empty:
+            PlaceholderView(systemImage: "doc.text", title: "Кодексов пока нет")
+
+        case .loaded(let items):
+            List(items) { item in
+                Button {
+                    viewModel.didSelect(item)
+                } label: {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("\(item.number) • \(item.title)")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                            .lineLimit(2)
+
+                        Text("Обновлено: \(item.updatedAt.formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
                 }
-                .padding(.vertical, 4)
             }
         }
-        .navigationTitle("Кодексы")
     }
 }
 
 #Preview {
-    CodesListView(coordinator: NavigationCoordinator<ProfileRoute>())
+    NavigationStack {
+        CodesListView(
+            viewModel: CodesListViewModel(
+                documentService: StubDocumentService(),
+                navigator: NavigationCoordinator<ProfileRoute>()
+            )
+        )
+    }
 }

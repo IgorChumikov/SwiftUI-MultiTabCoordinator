@@ -8,27 +8,47 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var app: TabBarCoordinator
-    @ObservedObject var coordinator: NavigationCoordinator<HistoryRoute>
-    
-    private let documents: [DocumentHistory] = [
-        .init(id: "1", title: "Договор аренды"),
-        .init(id: "2", title: "Акт приёма-передачи"),
-        .init(id: "3", title: "Счёт на оплату")
-    ]
-    
+    @StateObject private var viewModel: HistoryViewModel
+
+    init(viewModel: @autoclosure @escaping () -> HistoryViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
+
     var body: some View {
-        List(documents) { document in
-            Button {
-                coordinator.push(.documentDetails(document: document))
-            } label: {
-                Text(document.title)
+        content
+            .navigationTitle("Документы")
+            .task { await viewModel.onAppear() }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        case .empty:
+            PlaceholderView(systemImage: "clock", title: "История пуста")
+
+        case .loaded(let documents):
+            List(documents) { document in
+                Button {
+                    viewModel.didSelect(document)
+                } label: {
+                    Text(document.title)
+                }
             }
         }
-        .navigationTitle("Документы")
     }
 }
 
 #Preview {
-    HistoryView(coordinator: NavigationCoordinator<HistoryRoute>())
+    NavigationStack {
+        HistoryView(
+            viewModel: HistoryViewModel(
+                historyService: StubHistoryService(),
+                navigator: NavigationCoordinator<HistoryRoute>()
+            )
+        )
+    }
 }

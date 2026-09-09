@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct ReferenceListUIKitAssembly: View {
-    let coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
 
     var body: some View {
         UIKitViewControllerContainer(
             makeViewController: {
-                ReferenceListViewController()
-            },
-            updateViewController: { viewController in
-                viewController.coordinator = coordinator
-                viewController.items = HomeMockData.reference
+                ReferenceListViewController(navigator: navigator, items: HomeMockData.reference)
             }
         )
     }

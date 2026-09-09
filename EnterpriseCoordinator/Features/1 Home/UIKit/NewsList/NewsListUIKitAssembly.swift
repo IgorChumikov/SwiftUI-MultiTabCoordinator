@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct NewsListUIKitAssembly: View {
-    let coordinator: NavigationCoordinator<HomeRoute>
+    let navigator: HomeNavigating
 
     var body: some View {
         UIKitViewControllerContainer(
             makeViewController: {
-                NewsListViewController()
-            },
-            updateViewController: { viewController in
-                viewController.coordinator = coordinator
-                viewController.items = HomeMockData.newsArticles
+                NewsListViewController(navigator: navigator, items: HomeMockData.newsArticles)
             }
         )
     }
