@@ -1,110 +1,87 @@
 # SwiftUI Multi-Tab Coordinator
 
-Демонстрационное iOS-приложение, построенное на **новом data-driven подходе к навигации SwiftUI, доступном с iOS 16**. Вместо устаревшего `NavigationView` проект использует `NavigationStack`, `NavigationPath` и `navigationDestination(for:)`, позволяя описывать навигацию как состояние.
+## English
 
-Проект показывает, как применить этот API в масштабируемой Coordinator-архитектуре: разделить навигационное состояние, построение экранов и зависимости фич в приложении с несколькими табами.
+An example of the modern data-driven navigation API introduced in **SwiftUI with iOS 16**. The project uses `NavigationStack`, `NavigationPath`, and `navigationDestination(for:)` instead of the legacy `NavigationView`.
 
-Внутри — четыре раздела: **Главное**, **Избранное**, **История** и **Профиль**. У каждого таба свой `NavigationStack`, свой координатор и независимая история переходов.
+It demonstrates how to build scalable Coordinator-based navigation for an application with multiple tabs. Each tab has its own navigation stack, routes, and history.
 
-## Что показывает проект
+### Features
 
-- современную навигацию SwiftUI из iOS 16+: `NavigationStack`, `NavigationPath` и `navigationDestination`;
-- управление навигацией через данные и состояние, а не через прямое связывание экранов;
-- независимые стеки навигации для каждого таба;
-- type-safe маршруты на базе `Hashable`-enum;
-- разделение `Coordinator` и `Router`: первый хранит состояние, второй собирает экраны;
-- локальные модалки внутри таба и глобальные модалки уровня всего приложения;
-- deep links с выбором нужного таба и перестроением его стека;
-- dependency injection через composition root и узкие `*Dependencies`-протоколы;
-- аналитика фактических навигационных событий, включая системный back-swipe;
-- встраивание UIKit-экранов в SwiftUI-навигацию;
-- независимое состояние каждого окна при multi-window на iPadOS.
+- independent navigation stacks for four tabs;
+- type-safe routes based on `Hashable` enums;
+- separate Coordinator and Router responsibilities;
+- local and app-wide sheets and full-screen covers;
+- deep links that select a tab and rebuild its stack;
+- dependency injection through a composition root;
+- navigation analytics, including system back gestures;
+- UIKit screens embedded in SwiftUI navigation;
+- independent navigation state for each iPad window.
 
-## Архитектура
+### Architecture
 
 ```text
-EnterpriseCoordinatorApp
-├── AppContainer                 # сервисы на время жизни процесса
-└── AppCoordinatorView
-    └── AppComposition           # граф одной сцены / окна
-        ├── TabBarCoordinator     # выбранный таб и глобальные модалки
-        │   ├── NavigationCoordinator<HomeRoute>
-        │   ├── NavigationCoordinator<FavoritesRoute>
-        │   ├── NavigationCoordinator<HistoryRoute>
-        │   └── NavigationCoordinator<ProfileRoute>
-        ├── HomeRouter
-        ├── FavoritesRouter
-        ├── HistoryRouter
-        ├── ProfileRouter
-        └── GlobalModalRouter
+AppCoordinatorView
+└── AppComposition
+    ├── TabBarCoordinator
+    │   └── NavigationCoordinator<Route> × 4
+    ├── Feature Routers
+    └── GlobalModalRouter
 ```
 
-`NavigationCoordinator<RouteType>` — обобщённое хранилище `NavigationPath`, локальных sheet/cover и навигационных событий. Роутер каждой фичи превращает её route-enum в SwiftUI- или UIKit-экран и получает только нужные фиче зависимости.
+The Coordinator owns navigation state. The Router converts routes into SwiftUI or UIKit screens. `AppComposition` assembles the navigation graph separately for each scene, while `AppContainer` provides shared services.
 
-`AppComposition` создаётся через `@StateObject` для каждой сцены. Поэтому два окна на iPad не зеркалят выбранный таб, стеки и модалки. При этом `AppContainer` с сервисами остаётся общим для процесса.
+### Run
 
-## Структура проекта
+Open `EnterpriseCoordinator.xcodeproj`, select the `EnterpriseCoordinator` scheme and run it in an iOS Simulator. No external dependencies are required.
 
-```text
-EnterpriseCoordinator/
-├── App/                     # точка входа
-├── Features/                # экраны, ViewModel, Router и Route по фичам
-├── Navigation/
-│   ├── Coordinators/        # состояние и команды навигации
-│   ├── DeepLink/            # парсинг URL
-│   ├── Presentation/        # локальные и глобальные модалки
-│   ├── Routing/             # базовые протоколы
-│   └── TabBar/              # модель табов
-└── Shared/
-    ├── DI/                   # контейнер, composition root и stub-сервисы
-    └── UIKit/                # адаптеры UIKit → SwiftUI
-```
-
-## Запуск
-
-1. Клонируйте репозиторий.
-2. Откройте `EnterpriseCoordinator.xcodeproj` в Xcode.
-3. Выберите scheme `EnterpriseCoordinator` и iOS Simulator.
-4. Запустите проект через **Run** (`⌘R`).
-
-Внешние зависимости не требуются. Используемая модель навигации появилась в **iOS 16**, а текущая deployment target самого демо-проекта — **iOS 26.1**.
-
-## Deep links
-
-После запуска приложения в загруженном симуляторе deep links можно проверить из Terminal:
+### Deep links
 
 ```bash
-# Профиль → О приложении
 xcrun simctl openurl booted "enterprise://profile/about"
-
-# Короткая форма того же маршрута
-xcrun simctl openurl booted "enterprise://about"
-
-# Профиль → Настройки
 xcrun simctl openurl booted "enterprise://profile/settings"
 ```
 
-Обработчик выбирает таб `Profile`, сбрасывает его стек до корня и открывает целевой экран.
+---
 
-## Как добавить маршрут
+## Русский
 
-На примере фичи `Home`:
+Пример современного data-driven API навигации, появившегося в **SwiftUI начиная с iOS 16**. Вместо устаревшего `NavigationView` проект использует `NavigationStack`, `NavigationPath` и `navigationDestination(for:)`.
 
-1. Добавьте case в `HomeRoute`.
-2. Опишите целевой экран в `HomeRouter.view(for:)`.
-3. Вызовите `navigator.push(...)` из ViewModel или UIKit-модуля.
-4. При необходимости задайте имя события для аналитики.
+Проект показывает, как построить масштабируемую навигацию на базе Coordinator для приложения с несколькими табами. У каждого таба свой стек, маршруты и история переходов.
 
-Экраны не должны знать о `NavigationPath` или создании следующего экрана — они только передают навигационное намерение.
+### Возможности
 
-## Стек
+- независимые стеки навигации для четырёх табов;
+- type-safe маршруты на базе `Hashable`-enum;
+- разделение ответственности Coordinator и Router;
+- локальные и глобальные sheet и full-screen cover;
+- deep links с выбором таба и перестроением стека;
+- dependency injection через composition root;
+- аналитика навигации, включая системный back-swipe;
+- UIKit-экраны внутри SwiftUI-навигации;
+- независимое навигационное состояние каждого окна на iPad.
 
-- Swift
-- SwiftUI
-- UIKit
-- Combine
-- `NavigationStack` / `NavigationPath`
+### Архитектура
 
-## Статус
+```text
+AppCoordinatorView
+└── AppComposition
+    ├── TabBarCoordinator
+    │   └── NavigationCoordinator<Route> × 4
+    ├── Feature Routers
+    └── GlobalModalRouter
+```
 
-Проект учебный: сетевые и доменные сервисы заменены stub-реализациями. Основной акцент сделан на архитектуре навигации и границах ответственности между компонентами.
+Coordinator хранит состояние навигации. Router превращает маршруты в SwiftUI- или UIKit-экраны. `AppComposition` отдельно собирает граф навигации для каждой сцены, а `AppContainer` предоставляет общие сервисы.
+
+### Запуск
+
+Откройте `EnterpriseCoordinator.xcodeproj`, выберите scheme `EnterpriseCoordinator` и запустите проект в iOS Simulator. Внешние зависимости не требуются.
+
+### Deep links
+
+```bash
+xcrun simctl openurl booted "enterprise://profile/about"
+xcrun simctl openurl booted "enterprise://profile/settings"
+```
